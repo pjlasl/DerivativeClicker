@@ -109,10 +109,10 @@ function addMoneyPerClick(mpc){
 }
 
 function addProofs(proofs){
-	player.proofs += Math.floor(proofs);
-	player.proofsToNextCurr -= Math.floor(proofs);
-	player.totalProofs += Math.floor(proofs);
-	addMoney(-Math.floor(proofs) * player.costPerProof);
+	player.proofs += Math.round(proofs);
+	player.proofsToNextCurr -= Math.round(proofs);
+	player.totalProofs += Math.round(proofs);
+	addMoney(-Math.round(proofs) * player.costPerProof);
 }
 
 //function to display values
