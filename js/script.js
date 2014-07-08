@@ -74,7 +74,7 @@ var startPlayer = {
 
 var player = jQuery.extend(true, {}, startPlayer);
 
-var versionNum = 0.22;
+var versionNum = 0.221;
 
 //these variables hold constants between plays
 var upgradeCostFactor = [1.8, 1];
@@ -436,7 +436,9 @@ function updatePrestige(){
 }
 
 function ifUnlockedTier(tier){
-	if(player.numResets[tier - 5] >= 1) return true;
+	for(var i = numTiers - 1; i >= tier - 5; i--){
+		if(player.numResets[i] > 0) return true;
+	}
 	return false;
 }
 
@@ -563,6 +565,8 @@ function buyBuilding(index){
 		numToBuy--;
 	}
 	else numToBuy = player.numToBuy;
+	
+	if(numToBuy <= 0) return;
 	
 	moneyCost = calcTotalPrice(player.buildings[index].moneyCost, player.buildings[index].factor, numToBuy);
 	proofCost = Math.round(calcTotalPrice(player.buildings[index].proofCost, player.buildings[index].factor, numToBuy));
