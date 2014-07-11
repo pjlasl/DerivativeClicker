@@ -66,13 +66,13 @@ body {
 	padding-top: 0px;
 }
 
-#numToBuyContainer{
+#numToBuyContainer, #numToBuyContainer2{
 	margin-top: 30px;
 	display: block;
 	text-align: center; 
 }
 
-#numToBuy {
+#numToBuy, #numToBuy2 {
 	width: 100px;
 	text-align: center;
 	background-color: #D4DAFC;
@@ -80,13 +80,7 @@ body {
 	display: inline-block;
 }
 
-#submitNumToBuy{
-	width: auto;
-	padding: 1px 5px;
-	font-weight: bold;
-}
-
-#submitNumToBuy2{
+.submitNumToBuy{
 	width: auto;
 	padding: 1px 5px;
 	font-weight: bold;

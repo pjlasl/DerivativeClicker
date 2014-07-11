@@ -1,5 +1,8 @@
 Changelog:
 
+Version 0.222 (07/08/2014)
+Number to buy now works with upgrades (except click improver), fixed a minor bug causing money to go negative
+
 Version 0.221 (07/08/2014)
 Tier unlocking makes more sense, fixed negative buildings bug
 

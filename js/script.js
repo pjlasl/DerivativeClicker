@@ -74,7 +74,7 @@ var startPlayer = {
 
 var player = jQuery.extend(true, {}, startPlayer);
 
-var versionNum = 0.221;
+var versionNum = 0.222;
 
 //these variables hold constants between plays
 var upgradeCostFactor = [1.8, 1];
@@ -155,18 +155,20 @@ function calcTotalPrice(price, factor, number){
 }
 
 //function that allows number to buy to be adjusted
-function getNumToBuy(ifMax){
-	if(ifMax === -1){
+function getNumToBuy(num){
+    var activeTab = $("#tabs").tabs("option", "active");
+	if(num === -1){
 		player.numToBuy = "Max";
 	}
 	else{
-		var num = parseInt($("#numToBuy").val());
-		if(!isNaN(num) && num > 0){
-			player.numToBuy = num;
+		var newNum = parseInt(num);
+		if(!isNaN(newNum) && newNum > 0){
+			player.numToBuy = newNum;
 		}
 	}
-	$("#currentNumToBuy").html(player.numToBuy);
-	updateInventory();
+    $("#currentNumToBuy").html(player.numToBuy);
+	$("#currentNumToBuy2").html(player.numToBuy);
+	if(activeTab == 0) updateInventory();
 }
 
 function factorial(n){
@@ -465,22 +467,50 @@ function updateUpgrades(){
 	
 	buttonList = jQuery.makeArray($("#upgradesTable tr .button"));
 	
-	for(var i = 0; i < numTiers; i++){
-		if(player.money < player.tierUpgradeCosts[i]){
-			buttonList[i].className = "button";
-		}
-		else{
-			buttonList[i].className = "buttonLit";
-		}
-	}
-	for(var i = 0; i < 2; i++){
-		if(player.money < player.upgradeCosts[i]){
-			buttonList[i + numTiers].className = "button";
-		}
-		else{
-			buttonList[i + numTiers].className = "buttonLit";
-		}
-	}
+	if(player.numToBuy == "Max"){
+    	for(var i = 0; i < numTiers; i++){
+    		if(player.money < player.tierUpgradeCosts[i]){
+    			buttonList[i].className = "button";
+    		}
+    		else{
+    			buttonList[i].className = "buttonLit";
+    		}
+    	}
+    	for(var i = 0; i < 2; i++){
+    		if(player.money < player.upgradeCosts[i]){
+    			buttonList[i + numTiers].className = "button";
+    		}
+    		else{
+    			buttonList[i + numTiers].className = "buttonLit";
+    		}
+    	}
+    }
+    else{
+        for(var i = 0; i < numTiers; i++){
+            var cost = calcTotalPrice(player.tierUpgradeCosts[i], 1000, player.numToBuy);
+            if(player.money < cost){
+                buttonList[i].className = "button";
+            }
+            else{
+                buttonList[i].className = "buttonLit";
+            }
+        }
+        for(var i = 0; i < 1; i++){
+            var cost = calcTotalPrice(player.upgradeCosts[i], upgradeCostFactor[i], player.numToBuy);
+            if(player.money < cost){
+                buttonList[i + numTiers].className = "button";
+            }
+            else{
+                buttonList[i + numTiers].className = "buttonLit";
+            }
+        }
+        if(player.money < player.upgradeCosts[1]){ //click improver
+            buttonList[1 + numTiers].className = "button";
+        }
+        else{
+            buttonList[1 + numTiers].className = "buttonLit";
+        }
+    }
 }
 
 //this is a function to click the money button: allows auto button clicking
@@ -535,6 +565,7 @@ $(document).ready(function(){
 	$("#version").html(player.versionNum);
 
 	$("#currentNumToBuy").html(player.numToBuy);
+	$("#currentNumToBuy2").html(player.numToBuy);
 	
 	for(i = 1; i <= numTiers; i++){
 		calcMult(i);
@@ -613,11 +644,25 @@ function buyBuilding(index){
 //function to buy upgrades: onclick events
 
 function buyTierUpgrade(index){
-	if(player.money >= player.tierUpgradeCosts[index]){
-		player.tierUpgrades[index]++;
+    var numToBuy, cost;
+    if(player.numToBuy == "Max"){
+        var numToBuy = 0;
+        while(calcTotalPrice(player.tierUpgradeCosts[index], 1000, numToBuy) <= player.money){
+            numToBuy++;
+        }
+        numToBuy--;
+    }
+    else numToBuy = player.numToBuy;
+    
+    if(numToBuy <= 0) return;
+    
+    cost = calcTotalPrice(player.tierUpgradeCosts[index], 1000, numToBuy);
+    
+	if(player.money >= cost){
+		player.tierUpgrades[index]+= numToBuy;
 
-		addMoney(-player.tierUpgradeCosts[index]);
-		player.tierUpgradeCosts[index] = Math.round((player.tierUpgradeCosts[index] * 1000)*100)/100;
+		addMoney(-cost);
+		player.tierUpgradeCosts[index] = Math.round((player.tierUpgradeCosts[index] * Math.pow(1000, numToBuy))*100)/100;
 		calcMult(index + 1);
 		
 		updateUpgrades();
@@ -625,11 +670,26 @@ function buyTierUpgrade(index){
 	}
 }
 function buyUpgrade(index){
-	if(player.money >= player.upgradeCosts[index]){
-		player.upgrades[index]++;
+    var numToBuy, cost;
+    if(player.numToBuy == "Max"){
+        var numToBuy = 0;
+        while(calcTotalPrice(player.upgradeCosts[index], upgradeCostFactor[index], numToBuy) <= player.money){
+            numToBuy++;
+        }
+        numToBuy--;
+    }
+    else numToBuy = player.numToBuy;
+    
+    if(index == 1) numToBuy = 1; //click improver
+    if(numToBuy <= 0) return;
+    
+    cost = index == 1 ? player.upgradeCosts[index] : calcTotalPrice(player.upgradeCosts[index], upgradeCostFactor[index], numToBuy);
+    
+	if(player.money >= cost){
+		player.upgrades[index]+= numToBuy;
 
-		addMoney(-player.upgradeCosts[index]);
-		player.upgradeCosts[index] = Math.round((player.upgradeCosts[index] * upgradeCostFactor[index])*100)/100;
+		addMoney(-cost);
+		player.upgradeCosts[index] = Math.round((player.upgradeCosts[index] * Math.pow(upgradeCostFactor[index], numToBuy))*100)/100;
 		
 		if(index == 1){ //click improver
 			player.upgradeCosts[index] = factorial(player.upgrades[1]+1)*10*player.upgrades[1]+1
@@ -675,7 +735,7 @@ var update = function(){
 		if(player.money >= player.buildings[1].owned * player.costPerProof * player.mult[0] * globalMult[0] * player.timeMult){
 			addProofs(player.buildings[1].owned * player.mult[0] * globalMult[0] * player.timeMult);
 		}
-		else addProofs(player.money / player.costPerProof);
+		else addProofs(Math.floor(player.money / player.costPerProof));
 		
 		//does stuff every ten ticks
 		while(update.count >= 10){
