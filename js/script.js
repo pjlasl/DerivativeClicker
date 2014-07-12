@@ -58,7 +58,7 @@ var startPlayer = {
 	totalClicks: 0,
 	totalManualClicks: 0,
 	totalTicks: 0,
-	proofsToNextCurr: 100000000000000,
+	proofsToNextCurr: 10000000000000,
 	proofsToCurrTracker: 0,
 	mathematiciansToNextCurr: 7000000000,
 	mathematiciansToNextCurrTracker: 0,
