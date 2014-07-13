@@ -21,6 +21,45 @@ body {
 	text-decoration: none;
 }
 
+#donateLink {
+	text-decoration: underline;
+	color: #0000ff;
+	cursor: pointer;
+}
+
+#donate {
+	z-index: 20;
+	border: solid #000000 1px;
+	background-color: #ffffff;
+	border-radius: 4px;
+	width: 380px;
+	float: right;
+	position: absolute;
+	display: none;
+	padding: 10px;
+}
+
+#donate div{
+	height: 50px;
+	line-height: 50px;
+}
+
+#donate div span {
+	vertical-align: top;
+	display: inline-block;
+}
+
+#closeDonate {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	text-align: center;
+	font-size: 20px;
+	width: 100px;
+	height: 30px;
+	padding: 0px;
+}
+
 #header {
 	margin-left: auto;
 	margin-right: auto;

@@ -18,7 +18,20 @@
 	</head>
 <body>
 	<div id="container">
-		<div id="navbar"><a href="changelog.txt" target="_newtab">Changelog</a> | <a href="http://www.reddit.com/r/derivclicker/" target="_newtab">Subreddit</a></div>
+		<div id="navbar"><a href="changelog.txt" target="_newtab">Changelog</a> | <a href="http://www.reddit.com/r/derivclicker/" target="_newtab">Subreddit</a> | <a id="donateLink">Donate</a></div> 
+		<div id="donate">
+			I hope you're enjoying the game. As a student, your donations are greatly appreciated!<br />
+			<br />
+			<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_newtab" style="text-align: center;">
+				<input type="hidden" name="cmd" value="_s-xclick">
+				<input type="hidden" name="hosted_button_id" value="RMMXB8R5J8GX6">
+				<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+				<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+			</form>
+			<div><img src="img/bitcoin.png" /><span>&nbsp;187WQhKWeaBsav3phqnPbf1JoqkL3mjfdc</span></div><br />
+			<div><img src="img/dogecoin.png" /><span>&nbsp;D91Qq6FWtHF1GPYZ9Q27PKP7oC66Mnbb1G</span></div><br />
+			<button class="buttonLit" id="closeDonate">Close</button>
+		</div>
 		<h1 id="header">Derivative Clicker</h1>
 			<div class="button" id="moneyButton"><h3 id="moneyButtonText">Click to gain money</h3></div>
 			<!--INFO TABLE-->
@@ -605,6 +618,26 @@
 	<script src="js/libs/jquery-ui-1.10.4.custom.min.js"></script>
 	<script src="js/libs/underscore-min.js"></script>
 	<script src="js/libs/highcharts/js/highcharts.js"></script>-->
+	
+	<script>
+	$("#donateLink").click(function() {
+	    var pos = $(this).position();
+	
+	    // .outerWidth() takes into account border and padding.
+	    var width = $(this).outerWidth();
+	
+	    //show the menu directly over the placeholder
+	    $("#donate").css({
+	        position: "absolute",
+	        top: pos.top + "px",
+	        left: (pos.left + width) + "px"
+	    }).toggle();
+	});
+	
+	$("#closeDonate").click(function(){
+		$("#donate").hide();
+	})
+	</script>
 	
 	<script src="js/building.js"></script>
 	<script src="//cdn.jsdelivr.net/underscorejs/1.6.0/underscore-min.js"></script>
