@@ -760,7 +760,7 @@ var update = function(){
 		}
 		else{
 			var currToGain = Math.ceil(Math.pow(-player.proofsToNextCurr/(10000000/7) + Math.pow(10+player.proofsToCurrTracker, 7), 1/7)) - 10 - player.proofsToCurrTracker; //approximate reset curr gained without while loop
-			if(-player.proofsToNextCurr > 1e106) currToGain += currToGain / 1e14; //deals with inaccuracy in numbering
+			if(-player.proofsToNextCurr > 1e106) currToGain += currToGain / 1e8; //deals with inaccuracy in numbering
 			player.proofsToNextCurr += 10000000/7 * (Math.pow(10 + currToGain + player.proofsToCurrTracker, 7) - Math.pow(10 + player.proofsToCurrTracker - 1, 7));
 			player.resetCurrTracker += currToGain;
 			player.proofsToCurrTracker += currToGain;
