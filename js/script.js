@@ -881,7 +881,7 @@ var update = function(){
 		update.count2 += player.timeMult;
 		player.totalTicks += player.timeMult;
 		
-		player.updateInterval = 10 * Math.pow(0.98, Math.log(player.buildings[4].owned * player.mult[0] * globalMult[0] + 1));
+		player.updateInterval = 1000 * Math.pow(0.98, Math.log(player.buildings[4].owned * player.mult[0] * globalMult[0] + 1));
 		
 		//this fixes minimization by running until the interval tracker is less than 0 if the thing isn't active
 		if(!isActive) update.intervalTracker -= player.updateInterval * player.timeMult;
