@@ -92,7 +92,7 @@ var startPlayer = {
 
 var player = jQuery.extend(true, {}, startPlayer);
 
-var versionNum = 0.222;
+var versionNum = 0.3;
 
 //these variables hold constants between plays
 var upgradeCostFactor = [1.5, 100];
