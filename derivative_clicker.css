@@ -89,11 +89,6 @@ body {
 	text-align: center;
 }
 
-/*#tableContainer {
-	overflow: auto;
-	height: 325px;
-}*/
-
 #inventoryTable, #row5, #row6, #row7{
 	margin-left: auto;
 	margin-right: auto;
@@ -166,6 +161,15 @@ body {
 #prestigeTable tr td{
 	padding-left: 20px;
 	padding-right: 20px;
+}
+
+#prestigeTable tr td .buttonLit, #prestigeTable tr td .button {
+	height: 35px;
+	width: 50px;
+	font-size: 35px;
+	line-height: 35px;
+	text-align: center;
+	display: inline-block;
 }
 
 #bottom{
@@ -298,4 +302,10 @@ body {
 } 
 #tabs .ui-tabs-nav .ui-state-active a { 
     color: #000000; 
+}
+
+.ui-tooltip {
+	-webkit-box-shadow: 0 0 0;
+	box-shadow: 0 0 0;
+	background-color: #ffffff;
 }

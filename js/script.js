@@ -10,6 +10,7 @@ var startPlayer = {
 	netMoneyPerSecond: 0,
 	moneyPerClick: 1,
 	moneyPerAutoclick: 0,
+	clickPower: 1,
 	proofs: 0,
 	proofsPerSecond: 0,
 	costPerProof: 5,
@@ -39,7 +40,7 @@ var startPlayer = {
 	tierUpgrades: [0, 0, 0, 0, 0, 0, 0],
 	upgrades: [0, 0],
 	tierUpgradeCosts: [1000000, 1000000000, 1000000000000, 1000000000000000, 1000000000000000000, 1000000000000000000000, 1000000000000000000000000],
-	upgradeCosts: [100000, 10],
+	upgradeCosts: [100000, 10000000],
 	
 	//upgrade multipliers
 	mult: [1, 1, 1, 1, 1, 1, 1],
@@ -48,7 +49,6 @@ var startPlayer = {
 	clickTracker: 0,
 	updateInterval: 1000,
 	numToBuy: 1,
-	clicksToGain: 25,
 	timeMult: 1,
 	
 	//these variables aren't changed by resets	
@@ -64,6 +64,24 @@ var startPlayer = {
 	mathematiciansToNextCurrTracker: 0,
 	resetCurrTracker: 0, //this variable does have to be reset
 	
+	//reset currency buyable things
+	resetCurrFactor: 5, //integer
+	buildingInterval: 10,
+	autoclickInterval: 60,
+	clicksToGain: 25,
+	
+	/*reset currency buyables: columns down
+	 * 0: tier 5,                  6: click improver stage 1,  12: building tick decrease stage 1, 18: autoclicker tick decrease stage 1
+	 * 1: tier 6,                  7: click improver stage 2,  13: building tick decrease stage 2, 19: autoclicker tick decrease stage 2
+	 * 2: tier 7,                  8: click improver stage 3,  14: building tick decrease stage 3, 20: autoclicker tick decrease stage 3
+	 * 3: factor decrease stage 1, 9: click improver stage 4,  15: building tick decrease stage 4, 21: reset currency conversion factor stage 1
+	 * 4: factor decrease stage 2, 10: click improver stage 5, 16: building tick decrease stage 5, 22: reset currency conversion factor stage 2
+	 * 5: factor decrease stage 3, 11: click improver stage 6, 17: building tick decrease stage 6, 23: reset currency conversion factor stage 3
+	 */
+	currBuyables: [new CurrBuyable([10, 0, 0, 0, 0, 0]), new CurrBuyable([0, 50, 0, 0, 0, 0]), new CurrBuyable([0, 0, 100, 0, 0, 0]), new CurrBuyable([0, 0, 0, 100, 0, 0]), new CurrBuyable([0, 0, 0, 0, 100, 0]), new CurrBuyable([0, 0, 0, 0, 0, 100]),
+	               new CurrBuyable([1e3, 0, 0, 0, 0, 0]), new CurrBuyable([0, 1e3, 0, 0, 0, 0]), new CurrBuyable([0, 0, 2e3, 0, 0, 0]), new CurrBuyable([0, 0, 0, 5e3, 0, 0]), new CurrBuyable([0, 0, 0, 0, 1e4, 0]), new CurrBuyable([0, 0, 0, 0, 0, 2e4]),
+	               new CurrBuyable([1e5, 0, 0, 0, 0, 0]), new CurrBuyable([0, 1e5, 0, 0, 0, 0]), new CurrBuyable([0, 0, 2e5, 0, 0, 0]), new CurrBuyable([0, 0, 0, 2e5, 0, 0]), new CurrBuyable([0, 0, 0, 0, 5e5, 0]), new CurrBuyable([0, 0, 0, 0, 0, 5e5]),
+	               new CurrBuyable([1e7, 0, 0, 0, 0, 0]), new CurrBuyable([0, 1e7, 0, 0, 0, 0]), new CurrBuyable([0, 0, 2e7, 0, 0, 0]), new CurrBuyable([0, 0, 0, 1e9, 0, 0]), new CurrBuyable([0, 0, 0, 0, 2e9, 0]), new CurrBuyable([0, 0, 0, 0, 0, 5e9])],
 	//settings
 	sciNotation: false,
 	
@@ -77,7 +95,7 @@ var player = jQuery.extend(true, {}, startPlayer);
 var versionNum = 0.222;
 
 //these variables hold constants between plays
-var upgradeCostFactor = [1.8, 1];
+var upgradeCostFactor = [1.5, 100];
 
 var globalMult = [1, 1, 1, 1, 1, 1, 1];
 
@@ -240,11 +258,6 @@ function importSave(){
 	}
 }
 
-function ifMoreDerivs(tier){
-	if(player.numResets[tier - 1] == 0) return "Access to another derivative.\n"
-	return "";
-}
-
 function reset(tier) {
 	var index = tier - 1;
 	
@@ -257,12 +270,11 @@ function reset(tier) {
 		confirmationText += (displayNum(player.resetCurrTracker, false) + " tier 1 reset currency.\n");
 		if(tier > 1){
 			for(var i = 1; i < tier; i++){
-				confirmationText += (displayNum(Math.floor(player.resetCurr[i- 1] / 5, false)) + " tier " + (i + 1) + " reset currency.\n");
-				confirmationText += ("At the cost of " + displayNum(Math.floor(player.resetCurr[i - 1] / 5) * 5, false) + " tier " + i + " reset currency.\n");
+				confirmationText += (displayNum(Math.floor(player.resetCurr[i- 1] / player.resetCurrFactor, false)) + " tier " + (i + 1) + " reset currency.\n");
+				confirmationText += ("At the cost of " + displayNum(Math.floor(player.resetCurr[i - 1] / player.resetCurrFactor) * player.resetCurrFactor, false) + " tier " + i + " reset currency.\n");
 			}
 		}
-		confirmationText += ifMoreDerivs(tier);
-		
+				
 		confirmationText += "\n\nYes, I know this looks pretty awful. If you have any ideas on how to restructure the text here I\'m all ears."
 		
 		var confirmation = confirm(confirmationText);
@@ -271,8 +283,8 @@ function reset(tier) {
 			player.numResets[index]++;
 			if(tier > 1){
 				for(var i = index; i > 0; i--){
-					player.resetCurr[i] += Math.floor(player.resetCurr[i - 1] / 5);
-					player.resetCurr[i - 1] %= 5;
+					player.resetCurr[i] += Math.floor(player.resetCurr[i - 1] / player.resetCurrFactor);
+					player.resetCurr[i - 1] %= player.resetCurrFactor;
 				}
 			}
 			player.resetCurr[0] += player.resetCurrTracker;
@@ -284,6 +296,7 @@ function reset(tier) {
 				moneyPerSecond: 0,
 				netMoneyPerSecond: 0,
 				moneyPerClick: 1,
+				clickPower: 1,
 				moneyPerAutoclick: 0,
 				proofs: 0,
 				proofsPerSecond: 0,
@@ -298,12 +311,11 @@ function reset(tier) {
 							 new Building(2.7, 1000000000000, 1000000000), new Building(4, 500000000000000000, 0), new Building(8, 0, 10000000000000), new Building(3.7, 1000000000000000, 0), new Building(4, 1000000000000000000000000000, 0)],
 				tierUpgrades: [0, 0, 0, 0, 0, 0, 0],
 				upgrades: [0, 0],
-				tierUpgradeCosts: [1000000, 1000000000, 1000000000000, 1000000000000000, 1000000000000000000, 1000000000000000000000, 1000000000000000000000000],
-				upgradeCosts: [100000, 10],
+				tierUpgradeCosts: [1e6, 1e9, 1e12, 1e15, 1e18, 1e21, 1e24],
+				upgradeCosts: [100000, 10000000],
 				mult: [1, 1, 1, 1, 1, 1, 1],
 				clickTracker: 0,
 				updateInterval: 1000,
-				clicksToGain: 25,
 				timeMult: 1,
 				resetCurrTracker: 0
 			});
@@ -359,28 +371,28 @@ function updateInventory() {
 										andrewWilesOwned: displayNum(player.buildings[9].owned, false), andrewWilesCost: displayNum(player.buildings[9].moneyCost, true), andrewWilesManual: displayNum(player.buildings[9].manual, false), andrewWilesPower: displayNum(Math.round(player.mult[1] * globalMult[1]), false),
 										kurtGodelOwned: displayNum(player.buildings[14].owned, false), kurtGodelCost: displayNum(player.buildings[14].moneyCost, true), kurtGodelManual: displayNum(player.buildings[14].manual, false), kurtGodelPower: displayNum(Math.round(player.mult[2] * globalMult[2]), false),
 										georgRiemannOwned: displayNum(player.buildings[19].owned, false), georgRiemannCost: displayNum(player.buildings[19].moneyCost, true), georgRiemannManual: displayNum(player.buildings[19].manual, false), georgRiemannPower: displayNum(Math.round(player.mult[3] * globalMult[3]), false),
-										clicksToGain: player.clicksToGain});
+										clicksToGain: player.clicksToGain, buildingPeriod: player.buildingInterval});
 	
 	var row5 = row5Template({deriv5Owned: displayNum(player.buildings[20].owned, false), deriv5MoneyCost: displayNum(player.buildings[20].moneyCost, true), deriv5ProofCost: displayNum(player.buildings[20].proofCost, true), deriv5Manual: displayNum(player.buildings[20].manual, false), deriv5Power: displayNum(Math.round(player.mult[4] * globalMult[4]), false),
 										algebraOwned: displayNum(player.buildings[21].owned, false), algebraCost: displayNum(player.buildings[21].moneyCost, true), algebraManual: displayNum(player.buildings[21].manual, false), algebraPower: displayNum(Math.round(player.mult[4] * globalMult[4]), false),
 										designSchoolOwned: displayNum(player.buildings[22].owned, false), designSchoolCost: displayNum(player.buildings[22].proofCost, true), designSchoolManual: displayNum(player.buildings[22].manual, false), designSchoolPower: displayNum(Math.round(3 * player.mult[4] * globalMult[4]), false),
 										researchScientistOwned: displayNum(player.buildings[23].owned, false), researchScientistCost: displayNum(player.buildings[23].moneyCost, true), researchScientistManual: displayNum(player.buildings[23].manual, false), researchScientistPower: displayNum(Math.round(player.mult[4] * globalMult[4]), false),
 										carlGaussOwned: displayNum(player.buildings[24].owned, false), carlGaussCost: displayNum(player.buildings[24].moneyCost, true), carlGaussManual: displayNum(player.buildings[24].manual, false), carlGaussPower: displayNum(Math.round(player.mult[4] * globalMult[4]), false),
-										clicksToGain: player.clicksToGain});
+										clicksToGain: player.clicksToGain, buildingPeriod: player.buildingInterval});
 										
 	var row6 = row6Template({deriv6Owned: displayNum(player.buildings[25].owned, false), deriv6MoneyCost: displayNum(player.buildings[25].moneyCost, true), deriv6ProofCost: displayNum(player.buildings[25].proofCost, true), deriv6Manual: displayNum(player.buildings[25].manual, false), deriv6Power: displayNum(Math.round(player.mult[5] * globalMult[5]), false),
 										geometryOwned: displayNum(player.buildings[26].owned, false), geometryCost: displayNum(player.buildings[26].moneyCost, true), geometryManual: displayNum(player.buildings[26].manual, false), geometryPower: displayNum(Math.round(player.mult[5] * globalMult[5]), false),
 										deanArchitectureOwned: displayNum(player.buildings[27].owned, false), deanArchitectureCost: displayNum(player.buildings[27].proofCost, true), deanArchitectureManual: displayNum(player.buildings[27].manual, false), deanArchitecturePower: displayNum(Math.round(3 * player.mult[5] * globalMult[5]), false),
 										labManagerOwned: displayNum(player.buildings[28].owned, false), labManagerCost: displayNum(player.buildings[28].moneyCost, true), labManagerManual: displayNum(player.buildings[28].manual, false), labManagerPower: displayNum(Math.round(player.mult[5] * globalMult[5]), false),
 										leonhardEulerOwned: displayNum(player.buildings[29].owned, false), leonhardEulerCost: displayNum(player.buildings[29].moneyCost, true), leonhardEulerManual: displayNum(player.buildings[29].manual, false), leonhardEulerPower: displayNum(Math.round(player.mult[5] * globalMult[5]), false),
-										clicksToGain: player.clicksToGain});
+										clicksToGain: player.clicksToGain, buildingPeriod: player.buildingInterval});
 										
 	var row7 = row7Template({deriv7Owned: displayNum(player.buildings[30].owned, false), deriv7MoneyCost: displayNum(player.buildings[30].moneyCost, true), deriv7ProofCost: displayNum(player.buildings[30].proofCost, true), deriv7Manual: displayNum(player.buildings[30].manual, false), deriv7Power: displayNum(Math.round(player.mult[6] * globalMult[6]), false),
 										arithmeticOwned: displayNum(player.buildings[31].owned, false), arithmeticCost: displayNum(player.buildings[31].moneyCost, true), arithmeticManual: displayNum(player.buildings[31].manual, false), arithmeticPower: displayNum(Math.round(player.mult[6] * globalMult[6]), false),
 										chancellorOwned: displayNum(player.buildings[32].owned, false), chancellorCost: displayNum(player.buildings[32].proofCost, true), chancellorManual: displayNum(player.buildings[32].manual, false), chancellorPower: displayNum(Math.round(3 * player.mult[6] * globalMult[6]), false),
 										researchLabOwned: displayNum(player.buildings[33].owned, false), researchLabCost: displayNum(player.buildings[33].moneyCost, true), researchLabManual: displayNum(player.buildings[33].manual, false), researchLabPower: displayNum(Math.round(player.mult[6] * globalMult[6]), false),
 										isaacNewtonOwned: displayNum(player.buildings[34].owned, false), isaacNewtonCost: displayNum(player.buildings[34].moneyCost, true), isaacNewtonManual: displayNum(player.buildings[34].manual, false), isaacNewtonPower: displayNum(Math.round(player.mult[6] * globalMult[6]), false),
-										clicksToGain: player.clicksToGain});
+										clicksToGain: player.clicksToGain, buildingPeriod: player.buildingInterval});
 	
 	$("#firstRows").html(firstRows);
 	if(ifUnlockedTier(5)) $("#row5").html(row5);
@@ -427,21 +439,47 @@ function updateStats(){
 
 function updatePrestige(){
 	var newPrestige = prestigeTemplate({tier1Resets: player.numResets[0], tier1ResetCurr: displayNum(player.resetCurr[0], false), tier1GlobalMult: displayNum(globalMult[0], false), tier1CurrTracker: displayNum(player.resetCurrTracker, false),
-										tier2Resets: player.numResets[1], tier2ResetCurr: displayNum(player.resetCurr[1], false), tier2GlobalMult: displayNum(globalMult[1], false), tier2CurrTracker: displayNum(Math.floor(player.resetCurr[0] / 5), false),
-										tier3Resets: player.numResets[2], tier3ResetCurr: displayNum(player.resetCurr[2], false), tier3GlobalMult: displayNum(globalMult[2], false), tier3CurrTracker: displayNum(Math.floor(player.resetCurr[1] / 5), false),
-										tier4Resets: player.numResets[3], tier4ResetCurr: displayNum(player.resetCurr[3], false), tier4GlobalMult: displayNum(globalMult[3], false), tier4CurrTracker: displayNum(Math.floor(player.resetCurr[2] / 5), false),
-										tier5Resets: player.numResets[4], tier5ResetCurr: displayNum(player.resetCurr[4], false), tier5GlobalMult: displayNum(globalMult[4], false), tier5CurrTracker: displayNum(Math.floor(player.resetCurr[3] / 5), false),
-										tier6Resets: player.numResets[5], tier6ResetCurr: displayNum(player.resetCurr[5], false), tier6GlobalMult: displayNum(globalMult[5], false), tier6CurrTracker: displayNum(Math.floor(player.resetCurr[4] / 5), false),
+										tier2Resets: player.numResets[1], tier2ResetCurr: displayNum(player.resetCurr[1], false), tier2GlobalMult: displayNum(globalMult[1], false), tier2CurrTracker: displayNum(Math.floor(player.resetCurr[0] / player.resetCurrFactor), false),
+										tier3Resets: player.numResets[2], tier3ResetCurr: displayNum(player.resetCurr[2], false), tier3GlobalMult: displayNum(globalMult[2], false), tier3CurrTracker: displayNum(Math.floor(player.resetCurr[1] / player.resetCurrFactor), false),
+										tier4Resets: player.numResets[3], tier4ResetCurr: displayNum(player.resetCurr[3], false), tier4GlobalMult: displayNum(globalMult[3], false), tier4CurrTracker: displayNum(Math.floor(player.resetCurr[2] / player.resetCurrFactor), false),
+										tier5Resets: player.numResets[4], tier5ResetCurr: displayNum(player.resetCurr[4], false), tier5GlobalMult: displayNum(globalMult[4], false), tier5CurrTracker: displayNum(Math.floor(player.resetCurr[3] / player.resetCurrFactor), false),
+										tier6Resets: player.numResets[5], tier6ResetCurr: displayNum(player.resetCurr[5], false), tier6GlobalMult: displayNum(globalMult[5], false), tier6CurrTracker: displayNum(Math.floor(player.resetCurr[4] / player.resetCurrFactor), false),
 										proofsToNextCurr: displayNum(player.proofsToNextCurr, false), mathematiciansToNextCurr: displayNum(player.mathematiciansToNextCurr, false)});
-	
 	$("#prestige").html(newPrestige);
+	
+	var buttonListProto = jQuery.makeArray($("#prestigeTable tr td .button"));
+	var buttonList = new Array(buttonListProto.length);
+	for(i = 0; i < buttonListProto.length; i++){ //reorder elements to be in data order instead of DOM order
+		buttonList[(i%4)*6 + Math.floor(i/4)] = buttonListProto[i];
+	}
+	
+	for(var i = 0; i < buttonList.length; i++){
+		if (player.currBuyables[i].owned){
+			buttonList[i].innerHTML = "X";
+			buttonList[i].title += "<div class='strong'>Owned</div>";
+			continue;
+		} 
+		if (i % 6 != 0){
+			if(!player.currBuyables[i - 1].owned){
+				buttonList[i].title += "<div class='strong'>Not unlocked</div>";
+				continue;
+			}
+		}
+		var afford = true;
+		for (var j = 0; j < numTiers - 1; j++){
+			if (player.resetCurr[j] < player.currBuyables[i].cost[j]){
+				afford = false;
+				break;
+			}
+		}
+		if(!afford) continue;
+		
+		buttonList[i].className = "buttonLit";
+	}
 }
 
 function ifUnlockedTier(tier){
-	for(var i = numTiers - 1; i >= tier - 5; i--){
-		if(player.numResets[i] > 0) return true;
-	}
-	return false;
+	return player.currBuyables[tier - 5].owned;
 }
 
 function updateUpgrades(){
@@ -452,8 +490,8 @@ function updateUpgrades(){
 										tier5UpgradeCost: displayNum(player.tierUpgradeCosts[4], true), tier5UpgradeOwned: displayNum(player.tierUpgrades[4], false), tier5Mult: displayNum(player.mult[4], false),
 										tier6UpgradeCost: displayNum(player.tierUpgradeCosts[5], true), tier6UpgradeOwned: displayNum(player.tierUpgrades[5], false), tier6Mult: displayNum(player.mult[5], false),
 										tier7UpgradeCost: displayNum(player.tierUpgradeCosts[6], true), tier7UpgradeOwned: displayNum(player.tierUpgrades[6], false), tier7Mult: displayNum(player.mult[6], false),
-										autoclickerCost: displayNum(player.upgradeCosts[0], true), autoclickerOwned: displayNum(player.upgrades[0], false),
-										clickImproverCost: displayNum(player.upgradeCosts[1], true), clickImproverOwned: displayNum(player.upgrades[1], false)});
+										autoclickerCost: displayNum(player.upgradeCosts[0], true), autoclickerOwned: displayNum(player.upgrades[0], false), autoclickInterval: player.autoclickInterval,
+										manualClickBoosterCost: displayNum(player.upgradeCosts[1], true), manualClickBoosterOwned: displayNum(player.upgrades[1], false), clickPower: displayNum(player.clickPower, false)});
 	
 	$("#upgrades").html(newUpgrades);
 	
@@ -495,7 +533,7 @@ function updateUpgrades(){
                 buttonList[i].className = "buttonLit";
             }
         }
-        for(var i = 0; i < 1; i++){
+        for(var i = 0; i < 2; i++){
             var cost = calcTotalPrice(player.upgradeCosts[i], upgradeCostFactor[i], player.numToBuy);
             if(player.money < cost){
                 buttonList[i + numTiers].className = "button";
@@ -503,12 +541,6 @@ function updateUpgrades(){
             else{
                 buttonList[i + numTiers].className = "buttonLit";
             }
-        }
-        if(player.money < player.upgradeCosts[1]){ //click improver
-            buttonList[1 + numTiers].className = "button";
-        }
-        else{
-            buttonList[1 + numTiers].className = "buttonLit";
         }
     }
 }
@@ -567,6 +599,13 @@ $(document).ready(function(){
 	$("#currentNumToBuy").html(player.numToBuy);
 	$("#currentNumToBuy2").html(player.numToBuy);
 	
+	$('body').on('mouseover', "#prestigeTable tr td .buttonLit, #prestigeTable tr td .button", function(){
+		$(this).tooltip({show: false, hide: false, content: function () {
+        	return this.getAttribute("title");
+   		}});
+		$(this).tooltip("open");
+	});
+	
 	for(i = 1; i <= numTiers; i++){
 		calcMult(i);
 	}
@@ -579,8 +618,8 @@ $(document).ready(function(){
 	updatePrestige();
   
 	$("#moneyButton").click(function(){
-		moneyButtonClick(1);
-		player.totalManualClicks++;
+		moneyButtonClick(player.clickPower);
+		player.totalManualClicks += player.clickPower;
 	});  
 });
 
@@ -669,39 +708,91 @@ function buyTierUpgrade(index){
 		updateMoney();
 	}
 }
-function buyUpgrade(index){
-    var numToBuy, cost;
-    if(player.numToBuy == "Max"){
-        var numToBuy = 0;
-        while(calcTotalPrice(player.upgradeCosts[index], upgradeCostFactor[index], numToBuy) <= player.money){
-            numToBuy++;
-        }
-        numToBuy--;
-    }
-    else numToBuy = player.numToBuy;
-    
-    if(index == 1) numToBuy = 1; //click improver
-    if(numToBuy <= 0) return;
-    
-    cost = index == 1 ? player.upgradeCosts[index] : calcTotalPrice(player.upgradeCosts[index], upgradeCostFactor[index], numToBuy);
-    
-	if(player.money >= cost){
-		player.upgrades[index]+= numToBuy;
+
+function buyUpgrade(index) {
+	var numToBuy, cost;
+	if (player.numToBuy == "Max") {
+		var numToBuy = 0;
+		while (calcTotalPrice(player.upgradeCosts[index], upgradeCostFactor[index], numToBuy) <= player.money) {
+			numToBuy++;
+		}
+		numToBuy--;
+	} else numToBuy = player.numToBuy;
+
+	if (numToBuy <= 0) return;
+
+	cost = calcTotalPrice(player.upgradeCosts[index], upgradeCostFactor[index], numToBuy);
+
+	if (player.money >= cost) {
+		player.upgrades[index] += numToBuy;
 
 		addMoney(-cost);
-		player.upgradeCosts[index] = Math.round((player.upgradeCosts[index] * Math.pow(upgradeCostFactor[index], numToBuy))*100)/100;
-		
-		if(index == 1){ //click improver
-			player.upgradeCosts[index] = factorial(player.upgrades[1]+1)*10*player.upgrades[1]+1
-			if(player.upgrades[index] >= 24){
-				player.upgradeCosts[index] = Infinity;
-			}
-			player.clicksToGain--;
-		}
-		
+		player.upgradeCosts[index] = Math.round((player.upgradeCosts[index] * Math.pow(upgradeCostFactor[index], numToBuy)) * 100) / 100;
+
+		if (index == 1)	player.clickPower += numToBuy;
+
 		updateUpgrades();
 		updateMoney();
 	}
+}
+
+function buyCurrBuyable(index) {
+	//conditions for buyable
+	if (player.currBuyables[index].owned) return; //already owned
+	if (index % 6 != 0){
+		if(!player.currBuyables[index - 1].owned) return; //lower tier one not owned
+	}
+	for (var i = 0; i < numTiers - 1; i++) if (player.resetCurr[i] < player.currBuyables[index].cost[i]) return; //not enough curr
+
+	player.currBuyables[index].owned = true;
+	for (var i = 0; i < numTiers - 1; i++) player.resetCurr[i] -= player.currBuyables[index].cost[i];
+	calcGlobalMult();
+
+	switch(index) {
+		case 3:
+		case 4:
+		case 5:	//factor reducers
+			for (var i = 0; i < player.buildings.length; i++){
+				player.buildings[i].factor = 1 + (player.buildings[i].factor - 1) / 1.1;
+			}
+			break;
+		case 6:	//click improvers
+		case 7:
+			player.clicksToGain -= 5;
+			break;
+		case 8:
+			player.clicksToGain -= 4;
+			break;
+		case 9:
+			player.clicksToGain -= 3;
+			break;
+		case 10:
+		case 11:
+			player.clicksToGain -= 2;
+			break;
+		case 12: //building tick reducers
+		case 13:
+		case 14:
+		case 15:
+		case 16:
+		case 17:
+			player.buildingInterval -= 1;
+			break;
+		case 18: //autoclick tick reducers
+		case 19:
+		case 20:
+			player.autoclickInterval -= 10;
+			break;
+		case 21: //reset currency conversion factor
+		case 22:
+		case 23:
+			player.resetCurrFactor -= 1;
+			break;
+		default:
+			break;
+	}
+	
+	updatePrestige();
 }
 
 var update = function(){
@@ -738,16 +829,15 @@ var update = function(){
 		else addProofs(Math.floor(player.money / player.costPerProof));
 		
 		//does stuff every ten ticks
-		while(update.count >= 10){
+		while(update.count >= player.buildingInterval){
 			inventoryAdder();
-			update.count -= 10;
+			update.count -= player.buildingInterval;
 		}
 	
 		//does stuff every 60 ticks
-		while(update.count2 >= 60){
-			save();
+		while(update.count2 >= player.autoclickInterval){
 			moneyButtonClick(player.upgrades[0]);
-			update.count2 -= 60;
+			update.count2 -= player.autoclickInterval;
 		}
 		
 		//checks if enough proofs/mathematicians for reset currency: if so, adds reset currency
@@ -760,6 +850,7 @@ var update = function(){
 		}
 		else{
 			var currToGain = Math.ceil(Math.pow(-player.proofsToNextCurr/(10000000/7) + Math.pow(10+player.proofsToCurrTracker, 7), 1/7)) - 10 - player.proofsToCurrTracker; //approximate reset curr gained without while loop
+			if(-player.proofsToNextCurr > 1e106) currToGain += currToGain / 1e6; //deals with inaccuracy in numbering
 			player.proofsToNextCurr += 10000000/7 * (Math.pow(10 + currToGain + player.proofsToCurrTracker, 7) - Math.pow(10 + player.proofsToCurrTracker - 1, 7));
 			player.resetCurrTracker += currToGain;
 			player.proofsToCurrTracker += currToGain;
@@ -790,7 +881,7 @@ var update = function(){
 		update.count2 += player.timeMult;
 		player.totalTicks += player.timeMult;
 		
-		player.updateInterval = 1000 * Math.pow(0.98, Math.log(player.buildings[4].owned * player.mult[0] * globalMult[0] + 1));
+		player.updateInterval = 10 * Math.pow(0.98, Math.log(player.buildings[4].owned * player.mult[0] * globalMult[0] + 1));
 		
 		//this fixes minimization by running until the interval tracker is less than 0 if the thing isn't active
 		if(!isActive) update.intervalTracker -= player.updateInterval * player.timeMult;
@@ -826,6 +917,8 @@ var update = function(){
 }
 //stuff that happens each tick
 setTimeout(update, player.updateInterval * player.timeMult);
+
+setInterval(save, 60000);
 
 //stuff that happens every ten ticks (i.e. inventory additions)
 function inventoryAdder(){
