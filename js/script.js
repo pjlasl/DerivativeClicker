@@ -577,6 +577,9 @@ function versionControl(ifImport){
 		localStorage.setItem("playerStored", JSON.stringify(player));
 		return;
 	}
+	if(player.versionNum < 0.3){
+		player.clicksToGain = 25;
+	}
 	if(player.versionNum < versionNum || typeof player.versionNum == 'undefined'){
 		player.versionNum = versionNum;
 	}
