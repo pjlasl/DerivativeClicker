@@ -319,7 +319,21 @@ function reset(tier) {
 				timeMult: 1,
 				resetCurrTracker: 0
 			});
-			
+			if(player.currBuyables[3].owned){
+				for (var i = 0; i < player.buildings.length; i++){
+					player.buildings[i].factor = 1 + (player.buildings[i].factor - 1) / 1.1;
+				}
+				if(player.currBuyables[4].owned){
+					for (var i = 0; i < player.buildings.length; i++){
+						player.buildings[i].factor = 1 + (player.buildings[i].factor - 1) / 1.1;
+					}
+					if(player.currBuyables[5].owned){
+						for (var i = 0; i < player.buildings.length; i++){
+							player.buildings[i].factor = 1 + (player.buildings[i].factor - 1) / 1.1;
+						}
+					}
+				}
+			}
 			updateMoney();
 			updateInventory();
 			updateUpgrades();
@@ -831,16 +845,16 @@ var update = function(){
 		}
 		else addProofs(Math.floor(player.money / player.costPerProof));
 		
-		//does stuff every ten ticks
+		//does stuff every buildingInterval ticks
 		while(update.count >= player.buildingInterval){
 			inventoryAdder();
 			update.count -= player.buildingInterval;
 		}
 	
-		//does stuff every 60 ticks
-		while(update.count2 >= player.autoclickInterval){
-			moneyButtonClick(player.upgrades[0]);
-			update.count2 -= player.autoclickInterval;
+		//does stuff every autoclickInterval ticks
+		if(update.count2 >= player.autoclickInterval){
+			moneyButtonClick(player.upgrades[0] * Math.floor(update.count2 / player.autoclickInterval));
+			update.count2 = update.count2 % player.autoclickInterval;
 		}
 		
 		//checks if enough proofs/mathematicians for reset currency: if so, adds reset currency
