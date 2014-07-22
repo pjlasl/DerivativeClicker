@@ -5,7 +5,7 @@ Reset currency buyables: change click improver to reset curr buyable, ticks betw
 
 var startPlayer = {
 	//currencies
-	money: 0,
+	money: 0.05,
 	moneyPerSecond: 0,
 	netMoneyPerSecond: 0,
 	moneyPerClick: 1,
@@ -90,7 +90,7 @@ var startPlayer = {
 	versionNum: versionNum
 };
 
-var player = jQuery.extend(true, {}, startPlayer);
+var player = deepObjCopy(startPlayer);
 
 var versionNum = 0.3;
 
@@ -194,9 +194,29 @@ function factorial(n){
 	return n*factorial(n-1);
 }
 
+function deepObjCopy (dupeObj) {
+    var retObj = new Object();
+    if (typeof(dupeObj) == 'object') {
+        if (typeof(dupeObj.length) != 'undefined')
+            var retObj = new Array();
+        for (var objInd in dupeObj) {   
+            if (typeof(dupeObj[objInd]) == 'object') {
+                retObj[objInd] = deepObjCopy(dupeObj[objInd]);
+            } else if (typeof(dupeObj[objInd]) == 'string') {
+                retObj[objInd] = dupeObj[objInd];
+            } else if (typeof(dupeObj[objInd]) == 'number') {
+                retObj[objInd] = dupeObj[objInd];
+            } else if (typeof(dupeObj[objInd]) == 'boolean') {
+                ((dupeObj[objInd] == true) ? retObj[objInd] = true : retObj[objInd] = false);
+            }
+        }
+    }
+    return retObj;
+}
+
 //functions that handle saving
 function init(){
-	player = $.extend(true, {}, startPlayer);
+	player = deepObjCopy(startPlayer);
 };
 
 function save() {
@@ -292,7 +312,7 @@ function reset(tier) {
 			
 			//resets variables that are erased by reset
 			$.extend(true, player, {
-				money: 0,
+				money: 0.05,
 				moneyPerSecond: 0,
 				netMoneyPerSecond: 0,
 				moneyPerClick: 1,
@@ -565,15 +585,27 @@ function moneyButtonClick(amount) {
 	addMoney(player.moneyPerClick * amount);
 	player.clickTracker += amount;
 	player.totalClicks += amount;
-	while(player.clickTracker >= player.clicksToGain){
-		var toAdd = Math.round(player.buildings[8].owned * player.mult[1] * globalMult[1])
-		player.clickTracker -= player.clicksToGain;
-		addMoneyPerClick(0.1 * player.mult[0] * toAdd * globalMult[0]);
-		for(var i = 0; i < numTiers - 1; i++){
-			player.buildings[5*i + 3].owned += Math.round(player.buildings[5*(i+1) + 3].owned*player.mult[i+1]*globalMult[i+1]);
-		}
-		ifUpdate = true;
-	}
+	if(player.clickTracker < 5000 * player.clicksToGain){ //while loop gets executed max 5000 times
+    	while(player.clickTracker >= player.clicksToGain){
+    		var toAdd = Math.round(player.buildings[8].owned * player.mult[1] * globalMult[1])
+    		player.clickTracker -= player.clicksToGain;
+    		addMoneyPerClick(0.1 * player.mult[0] * toAdd * globalMult[0]);
+    		for(var i = 0; i < numTiers - 1; i++){
+    			player.buildings[5*i + 3].owned += Math.round(player.buildings[5*(i+1) + 3].owned*player.mult[i+1]*globalMult[i+1]);
+    		}
+    	}
+    	ifUpdate = true;
+    }
+    else{ //removes iterative component for large numbers
+        var toAdd = Math.round(player.buildings[8].owned * player.mult[1] * globalMult[1] * Math.floor(amount / player.clicksToGain));
+        player.clickTracker = amount % player.clicksToGain;
+        addMoneyPerClick(0.1 * player.mult[0] * toAdd * globalMult[0]);
+        for(var i = 0; i < numTiers - 1; i++){
+            player.buildings[5*i + 3].owned += Math.round(player.buildings[5*(i+1) + 3].owned*player.mult[i+1]*globalMult[i+1] * Math.floor(amount / player.clicksToGain));
+        }
+        ifUpdate = true;
+    }
+        
 	player.moneyPerAutoclick = player.upgrades[0] * player.moneyPerClick;
 	updateMoney();
 	if(ifUpdate) updateInventory();
@@ -593,6 +625,8 @@ function versionControl(ifImport){
 	}
 	if(player.versionNum < 0.3){
 		player.clicksToGain = 25;
+		player.upgrades[1] = 0;
+		player.upgradeCosts[1] = 10000000;
 	}
 	if(player.versionNum < versionNum || typeof player.versionNum == 'undefined'){
 		player.versionNum = versionNum;
@@ -846,9 +880,9 @@ var update = function(){
 		else addProofs(Math.floor(player.money / player.costPerProof));
 		
 		//does stuff every buildingInterval ticks
-		while(update.count >= player.buildingInterval){
-			inventoryAdder();
-			update.count -= player.buildingInterval;
+		if(update.count >= player.buildingInterval){
+			inventoryAdder(Math.floor(update.count / player.buildingInterval));
+			update.count = update.count % player.buildingInterval;
 		}
 	
 		//does stuff every autoclickInterval ticks
@@ -938,22 +972,45 @@ setTimeout(update, player.updateInterval * player.timeMult);
 setInterval(save, 60000);
 
 //stuff that happens every ten ticks (i.e. inventory additions)
-function inventoryAdder(){
-	player.mathematiciansToNextCurr -= Math.round(player.buildings[9].owned * player.mult[1] * globalMult[1]);
-	
-	for(var i = 0; i < player.buildings.length - 5; i++){
-		switch(i % 5){
-			case 0:
-			case 1:
-			case 4:
-				player.buildings[i].owned += Math.round(player.buildings[i+5].owned * player.mult[Math.floor(i/5) + 1] * globalMult[Math.floor(i/5) + 1]);
-				break;
-			case 2:
-				player.buildings[i].owned += Math.round(3 * player.buildings[i+5].owned * player.mult[Math.floor(i/5) + 1] * globalMult[Math.floor(i/5) + 1]);
-				break;
-			default:
-				break;
-				
-		}
-	}
+function inventoryAdder(amount){
+    if(amount < 250){
+        while(amount > 0){
+        	player.mathematiciansToNextCurr -= Math.round(player.buildings[9].owned * player.mult[1] * globalMult[1]);
+        	
+        	for(var i = 0; i < player.buildings.length - 5; i++){
+        		switch(i % 5){
+        			case 0:
+        			case 1:
+        			case 4:
+        				player.buildings[i].owned += Math.round(player.buildings[i+5].owned * player.mult[Math.floor(i/5) + 1] * globalMult[Math.floor(i/5) + 1]);
+        				break;
+        			case 2:
+        				player.buildings[i].owned += Math.round(3 * player.buildings[i+5].owned * player.mult[Math.floor(i/5) + 1] * globalMult[Math.floor(i/5) + 1]);
+        				break;
+        			default:
+        				break;
+        		}
+        	}
+        	amount--;
+        }
+    }
+    else{
+        player.mathematiciansToNextCurr -= Math.round(player.buildings[9].owned * player.mult[1] * globalMult[1] * amount);
+        
+        for(var i = 0; i < player.buildings.length - 5; i++){
+            switch(i % 5){
+                case 0:
+                case 1:
+                case 4:
+                    player.buildings[i].owned += Math.round(player.buildings[i+5].owned * player.mult[Math.floor(i/5) + 1] * globalMult[Math.floor(i/5) + 1]) * amount;
+                    break;
+                case 2:
+                    player.buildings[i].owned += Math.round(3 * player.buildings[i+5].owned * player.mult[Math.floor(i/5) + 1] * globalMult[Math.floor(i/5) + 1]) * amount;
+                    break;
+                default:
+                    break;
+                    
+            }
+        }
+    }
 }

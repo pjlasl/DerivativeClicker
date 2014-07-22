@@ -1,7 +1,7 @@
 Changelog:
 
 Version 0.3 
-Added reset currency buyables, which have various effects.
+Added reset currency buyables, which have various effects; players start with $0.05 on reset to allow for neverclick runs
 
 Version 0.222 (07/08/2014)
 Number to buy now works with upgrades (except click improver), fixed a minor bug causing money to go negative
