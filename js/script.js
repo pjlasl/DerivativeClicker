@@ -383,7 +383,7 @@ var prestigeTemplate = _.template($("#prestigeTemplate").html());
 //functions that update stuff onscreen
 function updateMoney() {
 	var newMoneyTable = moneyTableTemplate({money: displayNum(player.money, true), moneyPerSecond: displayNum(player.moneyPerSecond, true), netMoneyPerSecond: displayNum(player.netMoneyPerSecond, true), 
-											proofs: displayNum(player.proofs, false), proofsPerSecond: displayNum(player.proofsPerSecond, false), moneyPerClick: displayNum(player.moneyPerClick, true), 
+											proofs: displayNum(player.proofs, false), proofsPerSecond: displayNum(player.proofsPerSecond, false), moneyPerClick: displayNum(player.moneyPerClick * player.clickPower, true), 
 											tickLength: parseFloat(player.updateInterval).toFixed(0), moneyPerAutoclick: displayNum(player.moneyPerAutoclick, true)});
 
 	$("#info").html(newMoneyTable);
