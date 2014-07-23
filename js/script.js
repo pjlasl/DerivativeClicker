@@ -5,7 +5,7 @@ Reset currency buyables: change click improver to reset curr buyable, ticks betw
 
 var startPlayer = {
 	//currencies
-	money: 0.05,
+	money: 0.1,
 	moneyPerSecond: 0,
 	netMoneyPerSecond: 0,
 	moneyPerClick: 1,
@@ -317,7 +317,7 @@ function reset(tier) {
 			
 			//resets variables that are erased by reset
 			$.extend(true, player, {
-				money: 0.05,
+				money: 0.1,
 				moneyPerSecond: 0,
 				netMoneyPerSecond: 0,
 				moneyPerClick: 1,
