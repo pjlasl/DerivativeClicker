@@ -10,9 +10,9 @@ Building.prototype.add = function(num){
 	this.owned += num;
 }
 
-function CurrBuyable(cost){
+function CurrBuyable(cost, text){
 	this.owned = false;
-	this.cost = cost;
+	this.cost = cost; //cost is an array of length 6
 }
 
 CurrBuyable.prototype.buy = function(){

@@ -163,6 +163,15 @@ body {
 	padding-right: 20px;
 }
 
+#prestigeTable tr td .buttonLit, #prestigeTable tr td .button {
+	height: 35px;
+	width: 50px;
+	font-size: 35px;
+	line-height: 35px;
+	text-align: center;
+	display: inline-block;
+}
+
 #bottom{
 	clear: both;
 	font-size: 12px;
@@ -293,4 +302,10 @@ body {
 } 
 #tabs .ui-tabs-nav .ui-state-active a { 
     color: #000000; 
+}
+
+.ui-tooltip {
+	-webkit-box-shadow: 0 0 0;
+	box-shadow: 0 0 0;
+	background-color: #ffffff;
 }

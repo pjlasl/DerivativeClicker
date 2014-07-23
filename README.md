@@ -7,6 +7,30 @@ Github Pages hosted version of Derivative Clicker
 Changelog
 =========
 
+###Version 0.3 
+Added reset currency buyables, which have various effects.
+
+###Version 0.222 (07/08/2014)
+Number to buy now works with upgrades (except click improver), fixed a minor bug causing money to go negative
+
+###Version 0.221 (07/08/2014)
+Tier unlocking makes more sense, fixed negative buildings bug
+
+###Version 0.22 (07/04/2014)
+Added 7th tier, changed reset currency calculation, proper upgrade hiding, improved multiplier calculation, nerfed upgrade multipliers, added alternate number view, changed some names, made some things more efficient, rebalancing.
+
+###Version 0.21 (06/27/2014)
+Changed mathematician prestige formula to an explicit formula, bugfixes for version 0.2
+
+###Version 0.2 (06/27/2014)
+Added a sixth derivative (currently unlocked on first 2nd tier reset) as well as related sixth tier stuff, made 5th tier reset possible, refactored some code.
+
+###Version 0.184 (06/25/2014)
+Changed prestige proof formula to an explicit formula, moved update function into global namespace
+
+###Version 0.183 (06/20/2014)
+Added number suffixes to trigintillion, added total ticks statistic, added time multiplier (which multiplies everything by 10 when you get to 100 ms tick length, to speed up the game)
+
 ###Version 0.182 (06/13/2014)
 More number display fixes, buttons use onmousedown events for greater responsiveness
 
