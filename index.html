@@ -542,6 +542,59 @@
 					</select>
 					<br />
 					<div id="prestige"></div>
+					<div id="resetCurrBuyables">
+						<table id="resetCurrTable">
+							<thead><td>Buyables</td></thead>
+							<tr>
+								<td>
+									<div class="button" onmousedown="buyCurrBuyable(0)" title="Unlocks tier 5.<br /> Costs 10 reset currency.">T</div>
+									<div class="button" onmousedown="buyCurrBuyable(6)" title="Reduces clicks for new clicker buildings by 5.<br /> Costs 1.00K reset currency.">C</div>
+									<div class="button" onmousedown="buyCurrBuyable(12)" title="Reduces ticks for new buildings by 1.<br /> Costs 100.00K reset currency.">B</div>
+									<div class="button" onmousedown="buyCurrBuyable(18)" title="Reduces ticks between autoclicks by 10.<br /> Costs 10.00M reset currency.">A</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="button" onmousedown="buyCurrBuyable(1)" title="Unlocks tier 6.<br /> Costs 50 reset currency.">T</div>
+									<div class="button" onmousedown="buyCurrBuyable(7)" title="Reduces clicks for new clicker buildings by 5.<br /> Costs 1.00K reset currency.">C</div>
+									<div class="button" onmousedown="buyCurrBuyable(13)" title="Reduces ticks for new buildings by 1.<br /> Costs 100.00K reset currency.">B</div>
+									<div class="button" onmousedown="buyCurrBuyable(19)" title="Reduces ticks between autoclicks by 10.<br /> Costs 10.00M reset currency.">A</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="button" onmousedown="buyCurrBuyable(2)" title="Unlocks tier 7.<br /> Costs 100 reset currency.">T</div>
+									<div class="button" onmousedown="buyCurrBuyable(8)" title="Reduces clicks for new clicker buildings by 4.<br /> Costs 2.00K reset currency.">C</div>
+									<div class="button" onmousedown="buyCurrBuyable(14)" title="Reduces ticks for new buildings by 1.<br /> Costs 200.00K reset currency.">B</div>
+									<div class="button" onmousedown="buyCurrBuyable(20)" title="Reduces ticks between autoclicks by 10.<br /> Costs 20.00M reset currency.">A</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="button" onmousedown="buyCurrBuyable(3)" title="Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs 100 reset currency.">F</div>
+									<div class="button" onmousedown="buyCurrBuyable(9)" title="Reduces clicks for new clicker buildings by 3.<br /> Costs 5.00K reset currency.">C</div>
+									<div class="button" onmousedown="buyCurrBuyable(15)" title="Reduces ticks for new buildings by 1.<br /> Costs 200.00K reset currency.">B</div>
+									<div class="button" onmousedown="buyCurrBuyable(21)" title="Reduces reset currency conversion factor by 1.<br /> Costs 1.00B reset currency.">R</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="button" onmousedown="buyCurrBuyable(4)" title="Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs 100 reset currency.">F</div>
+									<div class="button" onmousedown="buyCurrBuyable(10)" title="Reduces clicks for new clicker buildings by 2.<br /> Costs 10.00K reset currency.">C</div>
+									<div class="button" onmousedown="buyCurrBuyable(16)" title="Reduces ticks for new buildings by 1.<br /> Costs 500.00K reset currency.">B</div>
+									<div class="button" onmousedown="buyCurrBuyable(22)" title="Reduces reset currency conversion factor by 1.<br /> Costs 2.00B reset currency.">R</div>
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="button" onmousedown="buyCurrBuyable(5)" title="Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs 100 reset currency.">F</div>
+									<div class="button" onmousedown="buyCurrBuyable(11)" title="Reduces clicks for new clicker buildings by 2.<br /> Costs 20.00K reset currency.">C</div>
+									<div class="button" onmousedown="buyCurrBuyable(17)" title="Reduces ticks for new buildings by 1.<br /> Costs 500.00K reset currency.">B</div>
+									<div class="button" onmousedown="buyCurrBuyable(23)" title="Reduces reset currency conversion factor by 1.<br /> Costs 5.00B reset currency.">R</div>
+								</td>
+							</tr>
+						</table>
+					</div>
 				</div>
 				<script type="text/template" id="prestigeTemplate">
 					<table id="prestigeTable">
@@ -551,7 +604,6 @@
 							<td>Reset currency</td>
 							<td>Multiplier</td>
 							<td>Currency to gain on reset</td>
-							<td>Buyables</td>
 						</thead>
 						<tr>
 							<td>1</td>
@@ -559,12 +611,6 @@
 							<td><%= tier1ResetCurr %></td>
 							<td><%= tier1GlobalMult %></td>
 							<td><%= tier1CurrTracker %></td>
-							<td>
-								<div class="button" onmousedown="buyCurrBuyable(0)" title="Unlocks tier 5.<br /> Costs 10 reset currency.">T</div>
-								<div class="button" onmousedown="buyCurrBuyable(6)" title="Reduces clicks for new clicker buildings by 5.<br /> Costs 1.00K reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(12)" title="Reduces ticks for new buildings by 1.<br /> Costs 100.00K reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(18)" title="Reduces ticks between autoclicks by 10.<br /> Costs 10.00M reset currency.">A</div>
-							</td>
 						</tr>
 						<tr>
 							<td>2</td>
@@ -572,12 +618,6 @@
 							<td><%= tier2ResetCurr %></td>
 							<td><%= tier2GlobalMult %></td>
 							<td><%= tier2CurrTracker %></td>
-							<td>
-								<div class="button" onmousedown="buyCurrBuyable(1)" title="Unlocks tier 6.<br /> Costs 50 reset currency.">T</div>
-								<div class="button" onmousedown="buyCurrBuyable(7)" title="Reduces clicks for new clicker buildings by 5.<br /> Costs 1.00K reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(13)" title="Reduces ticks for new buildings by 1.<br /> Costs 100.00K reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(19)" title="Reduces ticks between autoclicks by 10.<br /> Costs 10.00M reset currency.">A</div>
-							</td>
 						</tr>
 						<tr>
 							<td>3</td>
@@ -585,12 +625,6 @@
 							<td><%= tier3ResetCurr %></td>
 							<td><%= tier3GlobalMult %></td>
 							<td><%= tier3CurrTracker %></td>
-							<td>
-								<div class="button" onmousedown="buyCurrBuyable(2)" title="Unlocks tier 7.<br /> Costs 100 reset currency.">T</div>
-								<div class="button" onmousedown="buyCurrBuyable(8)" title="Reduces clicks for new clicker buildings by 4.<br /> Costs 2.00K reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(14)" title="Reduces ticks for new buildings by 1.<br /> Costs 200.00K reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(20)" title="Reduces ticks between autoclicks by 10.<br /> Costs 20.00M reset currency.">A</div>
-							</td>
 						</tr>
 						<tr>
 							<td>4</td>
@@ -598,12 +632,6 @@
 							<td><%= tier4ResetCurr %></td>
 							<td><%= tier4GlobalMult %></td>
 							<td><%= tier4CurrTracker %></td>
-							<td>
-								<div class="button" onmousedown="buyCurrBuyable(3)" title="Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs 100 reset currency.">F</div>
-								<div class="button" onmousedown="buyCurrBuyable(9)" title="Reduces clicks for new clicker buildings by 3.<br /> Costs 5.00K reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(15)" title="Reduces ticks for new buildings by 1.<br /> Costs 200.00K reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(21)" title="Reduces reset currency conversion factor by 1.<br /> Costs 1.00B reset currency.">R</div>
-							</td>
 						</tr>
 						<tr>
 							<td>5</td>
@@ -611,12 +639,6 @@
 							<td><%= tier5ResetCurr %></td>
 							<td><%= tier5GlobalMult %></td>
 							<td><%= tier5CurrTracker %></td>
-							<td>
-								<div class="button" onmousedown="buyCurrBuyable(4)" title="Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs 100 reset currency.">F</div>
-								<div class="button" onmousedown="buyCurrBuyable(10)" title="Reduces clicks for new clicker buildings by 2.<br /> Costs 10.00K reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(16)" title="Reduces ticks for new buildings by 1.<br /> Costs 500.00K reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(22)" title="Reduces reset currency conversion factor by 1.<br /> Costs 2.00B reset currency.">R</div>
-							</td>
 						</tr>
 						<tr>
 							<td>6</td>
@@ -624,16 +646,10 @@
 							<td><%= tier6ResetCurr %></td>
 							<td><%= tier6GlobalMult %></td>
 							<td><%= tier6CurrTracker %></td>
-							<td>
-								<div class="button" onmousedown="buyCurrBuyable(5)" title="Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs 100 reset currency.">F</div>
-								<div class="button" onmousedown="buyCurrBuyable(11)" title="Reduces clicks for new clicker buildings by 2.<br /> Costs 20.00K reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(17)" title="Reduces ticks for new buildings by 1.<br /> Costs 500.00K reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(23)" title="Reduces reset currency conversion factor by 1.<br /> Costs 5.00B reset currency.">R</div>
-							</td>
 						</tr>
 					</table>
 					<br />
-					<table>
+					<table id="prestigeDataTable">
 						<tr>
 							<td>Proofs to tier 1 reset currency:</td>
 							<td><%= proofsToNextCurr %></td>

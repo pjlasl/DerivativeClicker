@@ -154,22 +154,50 @@ body {
 	width: 150px;
 }
 
-#prestigeTable thead{
+#prestige {
+	float: left;
+}
+
+#resetCurrTable {
+	display: block;
+	border-collapse: collapse;
+	margin-top: 4px;
+}
+
+#prestigeTable thead, #resetCurrTable thead{
 	font-weight: bold;
 }
 
 #prestigeTable tr td{
 	padding-left: 20px;
 	padding-right: 20px;
+	height: 37px;
 }
 
-#prestigeTable tr td .buttonLit, #prestigeTable tr td .button {
+#resetCurrTable tr {
+	padding: 0px;
+	margin: 0px;
+}
+
+#resetCurrTable tr td {
+	width: 250px;
+	height: 35px;
+	padding: 0px;
+}
+
+#resetCurrTable tr td .buttonLit, #resetCurrTable tr td .button {
 	height: 35px;
 	width: 50px;
 	font-size: 35px;
 	line-height: 35px;
 	text-align: center;
 	display: inline-block;
+	margin: 2px;
+	float: left;
+}
+
+#prestigeDataTable {
+	clear: both;
 }
 
 #bottom{

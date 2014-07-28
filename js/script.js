@@ -92,7 +92,7 @@ var startPlayer = {
 
 var player = deepObjCopy(startPlayer);
 
-var versionNum = 0.3;
+var versionNum = 0.31;
 
 //these variables hold constants between plays
 var upgradeCostFactor = [1.5, 100];
@@ -241,10 +241,7 @@ function wipe() {
 		localStorage.setItem("playerStored", JSON.stringify(player));
 		calcGlobalMult();
 		
-		updateMoney();
-		updateInventory();
-		updateUpgrades();
-		updateStats();
+		updateAll();
 		$("#currentNumToBuy").html(player.numToBuy);
 	}
 }
@@ -270,11 +267,7 @@ function importSave(){
 		calcGlobalMult();
 		$("#currentNumToBuy").html(player.numToBuy);
 		
-		updateInventory();
-		updateUpgrades();
-		updateStats();
-		updateMoney();
-		updatePrestige();
+		updateAll();
 	}
 }
 
@@ -359,11 +352,7 @@ function reset(tier) {
 					}
 				}
 			}
-			updateMoney();
-			updateInventory();
-			updateUpgrades();
-			updateStats();
-			updatePrestige();
+			updateAll();
 			
 			ga('send', 'event', 'reset', 'click', 'reset'); //analytics
 		}
@@ -485,36 +474,45 @@ function updatePrestige(){
 										tier6Resets: player.numResets[5], tier6ResetCurr: displayNum(player.resetCurr[5], false), tier6GlobalMult: displayNum(globalMult[5], false), tier6CurrTracker: displayNum(Math.floor(player.resetCurr[4] / player.resetCurrFactor), false),
 										proofsToNextCurr: displayNum(player.proofsToNextCurr, false), mathematiciansToNextCurr: displayNum(player.mathematiciansToNextCurr, false)});
 	$("#prestige").html(newPrestige);
-	
-	var buttonListProto = jQuery.makeArray($("#prestigeTable tr td .button"));
-	var buttonList = new Array(buttonListProto.length);
-	for(i = 0; i < buttonListProto.length; i++){ //reorder elements to be in data order instead of DOM order
-		buttonList[(i%4)*6 + Math.floor(i/4)] = buttonListProto[i];
-	}
-	
-	for(var i = 0; i < buttonList.length; i++){
-		if (player.currBuyables[i].owned){
-			buttonList[i].innerHTML = "X";
-			buttonList[i].title += "<div class='strong'>Owned</div>";
-			continue;
-		} 
-		if (i % 6 != 0){
-			if(!player.currBuyables[i - 1].owned){
-				buttonList[i].title += "<div class='strong'>Not unlocked</div>";
-				continue;
-			}
-		}
-		var afford = true;
-		for (var j = 0; j < numTiers - 1; j++){
-			if (player.resetCurr[j] < player.currBuyables[i].cost[j]){
-				afford = false;
-				break;
-			}
-		}
-		if(!afford) continue;
-		
-		buttonList[i].className = "buttonLit";
-	}
+}
+
+function updateResetCurrBuyables(){
+    var buttonListProto = jQuery.makeArray($("#resetCurrTable tr td .button, #resetCurrTable tr td .buttonLit"));
+    var buttonList = new Array(buttonListProto.length);
+    for(i = 0; i < buttonListProto.length; i++){ //reorder elements to be in data order instead of DOM order
+        buttonList[(i%4)*6 + Math.floor(i/4)] = buttonListProto[i];
+    }
+    
+    if(typeof this.originalTitles == "undefined"){ //stores original titles of buttons
+        this.originalTitles = new Array(buttonList.length);
+        for(var i = 0; i < buttonList.length; i++) this.originalTitles[i] = buttonList[i].title;
+    }
+    
+    for(var i = 0; i < buttonList.length; i++){
+        buttonList[i].title = this.originalTitles[i];
+        if (player.currBuyables[i].owned){
+            buttonList[i].innerHTML = "X";
+            buttonList[i].title += "<div class='strong'>Owned</div>";
+            buttonList[i].className = "button";
+            continue;
+        } 
+        if (i % 6 != 0){
+            if(!player.currBuyables[i - 1].owned){
+                buttonList[i].title += "<div class='strong'>Not unlocked</div>";
+                continue;
+            }
+        }
+        var afford = true;
+        for (var j = 0; j < numTiers - 1; j++){
+            if (player.resetCurr[j] < player.currBuyables[i].cost[j]){
+                afford = false;
+                break;
+            }
+        }
+        if(!afford) continue;
+        
+        buttonList[i].className = "buttonLit";
+    }
 }
 
 function ifUnlockedTier(tier){
@@ -582,6 +580,15 @@ function updateUpgrades(){
             }
         }
     }
+}
+
+function updateAll(){
+    updateMoney();
+    updateInventory();
+    updateUpgrades();
+    updateStats();
+    updatePrestige();
+    updateResetCurrBuyables();
 }
 
 //this is a function to click the money button: allows auto button clicking
@@ -655,23 +662,16 @@ $(document).ready(function(){
 	$("#currentNumToBuy").html(player.numToBuy);
 	$("#currentNumToBuy2").html(player.numToBuy);
 	
-	$('body').on('mouseover', "#prestigeTable tr td .buttonLit, #prestigeTable tr td .button", function(){
-		$(this).tooltip({show: false, hide: false, content: function () {
-        	return this.getAttribute("title");
-   		}});
-		$(this).tooltip("open");
-	});
-	
+	$("#resetCurrTable tr td .buttonLit, #resetCurrTable tr td .button").tooltip({show: false, hide: false, content: function () {
+    	return this.getAttribute("title");
+	}});
+
 	for(i = 1; i <= numTiers; i++){
 		calcMult(i);
 	}
 	calcGlobalMult();
 	
-	updateMoney();
-	updateInventory();
-	updateUpgrades();
-	updateStats();
-	updatePrestige();
+    updateAll();
   
 	$("#moneyButton").click(function(){
 		moneyButtonClick(player.clickPower);
@@ -849,6 +849,7 @@ function buyCurrBuyable(index) {
 	}
 	
 	updatePrestige();
+	updateResetCurrBuyables();
 }
 
 var update = function(){
