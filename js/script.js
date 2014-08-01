@@ -25,7 +25,7 @@ var startPlayer = {
 	25: deriv6, 26: geometry, 27: dean of architecture, 28: lab manager, 29: leonhard euler
 	30: deriv7, 31: arithmetic, 32: chancellor, 33: research lab, 34: isaac newton
 	*/
-	buildings: [new Building(1.1, 0.1, 0), new Building(1.1, 25000, 0), new Building(1.3, 0, 2), new Building(1.1, 5, 0), new Building(1.05, 1000, 0),
+	buildings: [new Building(1.1, 0.1, 0), new Building(1.1, 25000, 0), new Building(1.3, 0, 3), new Building(1.1, 5, 0), new Building(1.05, 1000, 0),
 				 new Building(1.2, 500, 0), new Building(1.3, 20000000, 0), new Building(1.8, 0, 20000), new Building(1.2, 1000, 0), new Building(1.2, 100000000, 0),
 				 new Building(1.3, 20000, 0), new Building(1.8, 1000000000, 0), new Building(2.5, 0, 1000000), new Building(1.4, 100000, 0), new Building(1.5, 10000000000000, 0),
 				 new Building(1.5, 1000000, 1000), new Building(2.5, 500000000000, 0), new Building(4, 0, 30000000), new Building(2, 10000000, 0), new Building(2, 1000000000000000000, 0),
@@ -84,6 +84,7 @@ var startPlayer = {
 	               new CurrBuyable([1e7, 0, 0, 0, 0, 0]), new CurrBuyable([0, 1e7, 0, 0, 0, 0]), new CurrBuyable([0, 0, 2e7, 0, 0, 0]), new CurrBuyable([0, 0, 0, 1e9, 0, 0]), new CurrBuyable([0, 0, 0, 0, 2e9, 0]), new CurrBuyable([0, 0, 0, 0, 0, 5e9])],
 	//settings
 	sciNotation: false,
+	minTickLength: 100,
 	
 	numResets: [0, 0, 0, 0, 0, 0, 0],
 	resetCurr: [0, 0, 0, 0, 0, 0, 0],
@@ -92,7 +93,7 @@ var startPlayer = {
 
 var player = deepObjCopy(startPlayer);
 
-var versionNum = 0.31;
+var versionNum = 0.32;
 
 //these variables hold constants between plays
 var upgradeCostFactor = [1.5, 100];
@@ -257,7 +258,6 @@ function exportSave() {
 function importSave(){
 	var importText = prompt("Paste the text you were given by the export save dialog here.\n" +
 								"Warning: this will erase your current save!");
-								
 	if(importText){
 		init();
 		$.extend(true, player, startPlayer, JSON.parse(atob(importText)));
@@ -269,6 +269,20 @@ function importSave(){
 		
 		updateAll();
 	}
+}
+
+function setMinTickLength(){
+    var minTickLength;
+    do{
+        minTickLength = prompt("Enter a new minimum tick length between 10 and 1000 (noninclusive).");
+    } while((minTickLength >= 1000 || minTickLength <= 10) && minTickLength != null)
+    
+    if(minTickLength == null) return;
+    
+    player.minTickLength = minTickLength;
+    player.timeMult = 1;
+    while(player.updateInterval * player.timeMult < player.minTickLength) player.timeMult *= 1000 / player.minTickLength;
+    $("#minTickLength").html(minTickLength);
 }
 
 function ifMoreDerivs(tier){
@@ -373,7 +387,7 @@ var prestigeTemplate = _.template($("#prestigeTemplate").html());
 function updateMoney() {
 	var newMoneyTable = moneyTableTemplate({money: displayNum(player.money, true), moneyPerSecond: displayNum(player.moneyPerSecond, true), netMoneyPerSecond: displayNum(player.netMoneyPerSecond, true), 
 											proofs: displayNum(player.proofs, false), proofsPerSecond: displayNum(player.proofsPerSecond, false), moneyPerClick: displayNum(player.moneyPerClick * player.clickPower, true), 
-											tickLength: parseFloat(player.updateInterval).toFixed(0), moneyPerAutoclick: displayNum(player.moneyPerAutoclick, true)});
+											tickLength: parseFloat(player.updateInterval * player.timeMult).toFixed(0), timeMult: displayNum(player.timeMult, true), moneyPerAutoclick: displayNum(player.moneyPerAutoclick, true)});
 
 	$("#info").html(newMoneyTable);
 }
@@ -640,6 +654,36 @@ function versionControl(ifImport){
 		player.upgrades[1] = 0;
 		player.upgradeCosts[1] = 10000000;
 	}
+	if(player.versionNum < 0.32){
+		var set = false;
+		if(player.currBuyables[11].owned){
+			player.clicksToGain = 4;
+			set = true;
+		}
+		if(player.currBuyables[10].owned && !set){
+			player.clicksToGain = 6;
+			set = true;
+		}
+		if(player.currBuyables[9].owned && !set){
+			player.clicksToGain = 8;
+			set = true;
+		}
+		if(player.currBuyables[8].owned && !set){
+			player.clicksToGain = 11;
+			set = true;
+		}
+		if(player.currBuyables[7].owned && !set){
+			player.clicksToGain = 15;
+			set = true;
+		}
+		if(player.currBuyables[6].owned && !set){
+			player.clicksToGain = 20;
+			set = true;
+		}
+		if(!set){
+			player.clicksToGain = 25;
+		}
+	}
 	if(player.versionNum < versionNum || typeof player.versionNum == 'undefined'){
 		player.versionNum = versionNum;
 	}
@@ -661,6 +705,7 @@ $(document).ready(function(){
 
 	$("#currentNumToBuy").html(player.numToBuy);
 	$("#currentNumToBuy2").html(player.numToBuy);
+	$("#minTickLength").html(player.minTickLength);
 	
 	$("#resetCurrTable tr td .buttonLit, #resetCurrTable tr td .button").tooltip({show: false, hide: false, content: function () {
     	return this.getAttribute("title");
@@ -676,7 +721,7 @@ $(document).ready(function(){
 	$("#moneyButton").click(function(){
 		moneyButtonClick(player.clickPower);
 		player.totalManualClicks += player.clickPower;
-	});  
+	});
 });
 
 //function to buy buildings: onclick events
@@ -813,18 +858,22 @@ function buyCurrBuyable(index) {
 			}
 			break;
 		case 6:	//click improvers
+			player.clicksToGain = 20;
+			break;
 		case 7:
-			player.clicksToGain -= 5;
+			player.clicksToGain = 15;
 			break;
 		case 8:
-			player.clicksToGain -= 4;
+			player.clicksToGain = 11;
 			break;
 		case 9:
-			player.clicksToGain -= 3;
+			player.clicksToGain = 8;
 			break;
 		case 10:
+			player.clicksToGain = 6;
+			break;
 		case 11:
-			player.clicksToGain -= 2;
+			player.clicksToGain = 4;
 			break;
 		case 12: //building tick reducers
 		case 13:
@@ -968,7 +1017,7 @@ var update = function(){
 	
 	update.before = new Date();
 	
-	if(player.updateInterval * player.timeMult < 100) player.timeMult *= 10; //sets up time multiplier if game's ticking too fast
+	while(player.updateInterval * player.timeMult < player.minTickLength) player.timeMult *= 1000 / player.minTickLength; //sets up time multiplier if game's ticking too fast
 	
 	setTimeout(update, player.updateInterval * player.timeMult);
 }

@@ -1,5 +1,8 @@
 Changelog:
 
+Version 0.32
+Add a new option that allows you set the minimum tick length, changed tick length display, fixed clicks to gain going negative, change initial computer price
+
 Version 0.31 (07/28/2014)
 Make tooltips not flash
 

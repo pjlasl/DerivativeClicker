@@ -65,7 +65,7 @@
 						<td id="mPAC" colspan=5>Money per autoclick: $<%= moneyPerAutoclick %></td>
 					</tr>
 					<tr>
-						<td id="tickLenCell" colspan="5">Tick length: <%= tickLength %> ms</td>
+						<td id="tickLenCell" colspan="5">Tick length: <%= tickLength %> ms / <%= timeMult %></td>
 					</tr>
 				</table>
 			</script>
@@ -486,8 +486,14 @@
 							<td class="spacer" colspan="2"></td>
 						</tr>
 						<tr>
-							<td class="buttonLit option" onclick="player.sciNotation = !player.sciNotation">Toggle Number View</td>
-							<td class="spacer" colspan="2"></td>
+							<td class="buttonLit option" onclick="player.sciNotation = !player.sciNotation">Toggle Numbers</td>
+							<td class="spacer"></td>
+							<td>Toggles numbers between suffixes and scientific.</td>
+						</tr>
+						<tr>
+							<td class="buttonLit option" id="selectMinTickLength" onclick="setMinTickLength()">Set Tick Speed</td>
+							<td class="spacer"></td>
+							<td>Sets the minimum tick length for time multiplier activation. Currently <span id="minTickLength">100</span> ms.</td>
 						</tr>
 					</table>
 				</div>
