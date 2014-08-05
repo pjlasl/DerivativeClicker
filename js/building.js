@@ -18,3 +18,10 @@ function CurrBuyable(cost, text){
 CurrBuyable.prototype.buy = function(){
 	this.owned = true;
 }
+
+function Achievement(name, text, condition){
+	this.achieved = false;
+	this.name = name;
+	this.text = text;
+	this.condition = new Function("return " + condition + ";");
+}
