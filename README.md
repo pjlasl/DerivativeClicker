@@ -7,8 +7,17 @@ Github Pages hosted version of Derivative Clicker
 Changelog
 =========
 
-###Version 0.3 
-Added reset currency buyables, which have various effects.
+###Version 0.321 (08/05/2014)
+Fixed a bug relating to reset currency buyable display, added number suffixes and link to Github repository
+
+###Version 0.32 (08/01/2014)
+Add a new option that allows you set the minimum tick length, changed tick length display, fixed clicks to gain going negative, change initial computer price
+
+###Version 0.31 (07/28/2014)
+Make tooltips not flash
+
+###Version 0.3 (07/22/2014)
+Added reset currency buyables, which have various effects; players start with $0.10 on reset to allow for neverclick runs
 
 ###Version 0.222 (07/08/2014)
 Number to buy now works with upgrades (except click improver), fixed a minor bug causing money to go negative
