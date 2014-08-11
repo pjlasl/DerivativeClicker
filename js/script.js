@@ -80,8 +80,20 @@ var startPlayer = {
 	 */
 	currBuyables: [new CurrBuyable([10, 0, 0, 0, 0, 0]), new CurrBuyable([0, 50, 0, 0, 0, 0]), new CurrBuyable([0, 0, 100, 0, 0, 0]), new CurrBuyable([0, 0, 0, 100, 0, 0]), new CurrBuyable([0, 0, 0, 0, 100, 0]), new CurrBuyable([0, 0, 0, 0, 0, 100]),
 	               new CurrBuyable([1e3, 0, 0, 0, 0, 0]), new CurrBuyable([0, 1e3, 0, 0, 0, 0]), new CurrBuyable([0, 0, 2e3, 0, 0, 0]), new CurrBuyable([0, 0, 0, 5e3, 0, 0]), new CurrBuyable([0, 0, 0, 0, 1e4, 0]), new CurrBuyable([0, 0, 0, 0, 0, 2e4]),
-	               new CurrBuyable([1e5, 0, 0, 0, 0, 0]), new CurrBuyable([0, 1e5, 0, 0, 0, 0]), new CurrBuyable([0, 0, 2e5, 0, 0, 0]), new CurrBuyable([0, 0, 0, 2e5, 0, 0]), new CurrBuyable([0, 0, 0, 0, 5e5, 0]), new CurrBuyable([0, 0, 0, 0, 0, 5e5]),
+				   new CurrBuyable([1e5, 0, 0, 0, 0, 0]), new CurrBuyable([0, 1e5, 0, 0, 0, 0]), new CurrBuyable([0, 0, 2e5, 0, 0, 0]), new CurrBuyable([0, 0, 0, 2e5, 0, 0]), new CurrBuyable([0, 0, 0, 0, 5e5, 0]), new CurrBuyable([0, 0, 0, 0, 0, 5e5]),
 	               new CurrBuyable([1e7, 0, 0, 0, 0, 0]), new CurrBuyable([0, 1e7, 0, 0, 0, 0]), new CurrBuyable([0, 0, 2e7, 0, 0, 0]), new CurrBuyable([0, 0, 0, 1e9, 0, 0]), new CurrBuyable([0, 0, 0, 0, 2e9, 0]), new CurrBuyable([0, 0, 0, 0, 0, 5e9])],
+	
+	achievements: [new Achievement("First Click", "Click for the first time!", "player.totalManualClicks > 0"), new Achievement("Clicking 'Expert'", "Click 100 times", "player.totalManualClicks > 100"),
+				   new Achievement("Needs More Click", "Click 1000 times", "player.totalManualClicks > 1000"), new Achievement("Algorithmic Clicker", "Click 10000 times", "player.totalManualClicks > 10000"),
+				   new Achievement("Clickmeister", "Click 100000 times", "player.totalManualClicks > 100000"), new Achievemenet("Clickmaster", "Click 1 million times", "player.totalManualClicks > 1e6"),
+				   new Achievement("You're Probably Autoclicking", "Click 10 million times", "player.totalManualClicks > 1e7"), new Achievement("It begins...", "Buy a first derivative", "player.buildings[0].manual > 0"),
+				   new Achievement("Quadratic Growth", "Buy a second derivative", "player.buildings[5].manual > 0"), new Achievement("Cubic Growth", "Buy a third derivative", "player.buildings[10].manual > 0"),
+				   new Achievement("Quartic Growth", "Buy a fourth derivative", "player.buildings[15].manual > 0"), new Achievement("Quintic Growth", "Buy a fifth derivative", "player.buildings[20].manual > 0"),
+				   new Achievement("Sextic Growth", "Buy a sixth derivative", "player.buildings[25].manual > 0"), new Achievement("Septic Growth", "Buy a seventh derivative", "player.buildings[30].manual > 0"),
+				   new Achievement("Fermat's Last Theorem", "Buy an Andrew Wiles", "player.buildings[9].owned > 0"), new Achievement("Incompleteness Theorem", "Buy a Kurt Godel", "player.buildings[14].owned > 0"),
+				   new Achievement("Riemann Sums", "Buy a Bernhard Riemann", "player.buildings[19].owned > 0"), new Achievement("Fundamental Theorem of Algebra", "Buy a Carl Gauss", "player.buildings[24].owned > 0"),
+				   new Achievement("Euler's Identity", "Buy a Leonhard Euler", "player.buildings[29].owned > 0"), new Achievement("Calculus", "Buy an Isaac Newton", "player.buildings[34].owned > 0"),
+				   new Achievement("Start From Scratch", "Do a tier 1 reset", "player.numResets[0] > 0"), new Achievement("")];
 	//settings
 	sciNotation: false,
 	minTickLength: 100,
