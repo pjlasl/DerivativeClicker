@@ -1,5 +1,8 @@
 Changelog:
 
+Version 0.33 (08/17/2014)
+Added base achievement code and a few achievements, added chart options, fixed bug with costs of click booster
+
 Version 0.321 (08/05/2014)
 Fixed a bug relating to reset currency buyable display, added number suffixes and link to Github repository
 

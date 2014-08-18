@@ -787,7 +787,6 @@ $(document).ready(function(){
 	versionControl(false);
 	
 	fixJSON();
-	if(player.upgrades[1] == 24) player.upgradeCosts[1] = Infinity; //deals with JSON's incompatibility with Infinity
 
 	$("#version").html(player.versionNum);
 
