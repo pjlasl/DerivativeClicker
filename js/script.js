@@ -541,11 +541,13 @@ function updateAchievements(){
 			if(typeof(cheevList[cheevIndex]) == 'undefined' || achievement.name != cheevList[cheevIndex].innerHTML){
 				var element = document.createElement("div");
 				element.setAttribute("class", "achievement");
-				var tooltip = "<p>" + achievement.text + "</p><p>Earned at " + achievement.time.toLocaleTimeString() + " " + achievement.time.toLocaleDateString() + "</p>";
-				element.setAttribute("title", tooltip);
+				var tooltip = achievement.text + "<br />Earned at " + achievement.time.toLocaleTimeString() + " " + achievement.time.toLocaleDateString();
+				element.title = tooltip;
 				element.innerHTML = achievement.name;
 				cheevList.splice(cheevIndex, 0, element);
-				$(element).tooltip({show:false, hide:false});
+				$(element).tooltip({show:false, hide:false, content: function () {
+			    	return this.getAttribute("title");
+				}});
 				changed = true;
 			}
 			cheevIndex++;
