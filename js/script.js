@@ -111,7 +111,7 @@ var startPlayer = {
 
 var player = deepObjCopy(startPlayer);
 
-var versionNum = 0.321;
+var versionNum = 0.33;
 
 //these variables hold constants between plays
 var upgradeCostFactor = [1.5, 100];
@@ -768,6 +768,9 @@ function versionControl(ifImport){
 			player.clicksToGain = 25;
 		}
 	}
+	if(player.versionNum < 0.33){
+		if(isNaN(player.upgradeCosts[1])) player.upgradeCosts[1] = 10000000 * Math.pow(100, 24);
+	}
 	if(player.versionNum < versionNum || typeof player.versionNum == 'undefined'){
 		player.versionNum = versionNum;
 	}
@@ -785,7 +788,7 @@ $(document).ready(function(){
 	
 	fixJSON();
 	if(player.upgrades[1] == 24) player.upgradeCosts[1] = Infinity; //deals with JSON's incompatibility with Infinity
-	
+
 	$("#version").html(player.versionNum);
 
 	$("#currentNumToBuy").html(player.numToBuy);
