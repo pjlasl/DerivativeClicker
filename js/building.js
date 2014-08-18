@@ -24,5 +24,5 @@ function Achievement(name, text, condition){
 	this.name = name;
 	this.text = text;
 	this.condition = new Function("return " + condition + ";");
-	this.time = null;
+	this.time = undefined;
 }

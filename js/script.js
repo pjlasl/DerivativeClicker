@@ -85,18 +85,24 @@ var startPlayer = {
 	
 	achievements: [new Achievement("First Click", "Click for the first time!", "player.totalManualClicks > 0"), new Achievement("Clicking 'Expert'", "Click 100 times", "player.totalManualClicks > 100"),
 				   new Achievement("Needs More Click", "Click 1000 times", "player.totalManualClicks > 1000"), new Achievement("Algorithmic Clicker", "Click 10000 times", "player.totalManualClicks > 10000"),
-				   new Achievement("Clickmeister", "Click 100000 times", "player.totalManualClicks > 100000"), new Achievemenet("Clickmaster", "Click 1 million times", "player.totalManualClicks > 1e6"),
+				   new Achievement("Clickmeister", "Click 100000 times", "player.totalManualClicks > 100000"), new Achievement("Clickmaster", "Click 1 million times", "player.totalManualClicks > 1e6"),
 				   new Achievement("You're Probably Autoclicking", "Click 10 million times", "player.totalManualClicks > 1e7"), new Achievement("It begins...", "Buy a first derivative", "player.buildings[0].manual > 0"),
 				   new Achievement("Quadratic Growth", "Buy a second derivative", "player.buildings[5].manual > 0"), new Achievement("Cubic Growth", "Buy a third derivative", "player.buildings[10].manual > 0"),
 				   new Achievement("Quartic Growth", "Buy a fourth derivative", "player.buildings[15].manual > 0"), new Achievement("Quintic Growth", "Buy a fifth derivative", "player.buildings[20].manual > 0"),
 				   new Achievement("Sextic Growth", "Buy a sixth derivative", "player.buildings[25].manual > 0"), new Achievement("Septic Growth", "Buy a seventh derivative", "player.buildings[30].manual > 0"),
-				   new Achievement("Fermat's Last Theorem", "Buy an Andrew Wiles", "player.buildings[9].owned > 0"), new Achievement("Incompleteness Theorem", "Buy a Kurt Godel", "player.buildings[14].owned > 0"),
-				   new Achievement("Riemann Sums", "Buy a Bernhard Riemann", "player.buildings[19].owned > 0"), new Achievement("Fundamental Theorem of Algebra", "Buy a Carl Gauss", "player.buildings[24].owned > 0"),
-				   new Achievement("Euler's Identity", "Buy a Leonhard Euler", "player.buildings[29].owned > 0"), new Achievement("Calculus", "Buy an Isaac Newton", "player.buildings[34].owned > 0"),
-				   new Achievement("Start From Scratch", "Do a tier 1 reset", "player.numResets[0] > 0"), new Achievement("")];
+				   new Achievement("Fermat's Last Theorem", "Have 7 billion Andrew Wiles", "player.buildings[9].owned > 7e9"), new Achievement("Incompleteness Theorem", "Have 7 billion Kurt Godels", "player.buildings[14].owned > 7e9"),
+				   new Achievement("Riemann Sums", "Have 7 billion Bernhard Riemanns", "player.buildings[19].owned > 7e9"), new Achievement("Fundamental Theorem of Algebra", "Have 7 billion Carl Gauss", "player.buildings[24].owned > 7e9"),
+				   new Achievement("Euler's Identity", "Have 7 billion Leonhard Eulers", "player.buildings[29].owned > 7e9"), new Achievement("Calculus", "Have 7 billion Isaac Newtons", "player.buildings[34].owned > 7e9"),
+				   new Achievement("Start From Scratch", "Do a tier 1 reset", "player.numResets[0] > 0"), new Achievement("High Tier", "Do a tier 6 reset", "player.numResets[6] > 0"),
+				   new Achievement("Millionaire", "Make a million dollars in total", "player.totalMoneyEarned > 1e6"), new Achievement("Billionaire", "Make a billion dollars in total", "player.totalMoneyEarned > 1e9"),
+				   new Achievement("...Quadrillionaire?", "Make a quadrillion dollars in total", "player.totalMoneyEarned > 1e15"), new Achievement("Decillionaire", "Make a decillion dollars in total", "player.totalMoneyEarned > 1e33"),
+				   new Achievement("Vigintillionaire", "Make a vigintillion dollars in total", "player.totalMoneyEarned > 1e63"), new Achievement("Yeah this isn't a real thing", "Make a trigintillion dollars in total", "player.totalMoneyEarned > 1e93"),
+				   new Achievement("Centillionaire", "Make a centillion dollars in total", "player.totalMoneyEarned > 1e303")],
 	//settings
 	sciNotation: false,
 	minTickLength: 100,
+	chartDelay: 10000,
+	chartLength: 100,
 	
 	numResets: [0, 0, 0, 0, 0, 0, 0],
 	resetCurr: [0, 0, 0, 0, 0, 0, 0],
@@ -187,6 +193,17 @@ function calcTotalPrice(price, factor, number){
 	return price*((Math.pow(factor, number) - 1)/(factor - 1));
 }
 
+function checkAchievement(index){
+	var achievement = player.achievements[index];
+	if(achievement.achieved) return;
+	else{
+		if(achievement.condition()){
+			achievement.achieved = true;
+			achievement.time = new Date();
+		}
+	}
+}
+
 //function that allows number to buy to be adjusted
 function getNumToBuy(num){
     var activeTab = $("#tabs").tabs("option", "active");
@@ -209,6 +226,16 @@ function factorial(n){
 	return n*factorial(n-1);
 }
 
+function cloneFunc(someFunc) {
+    var someFuncAsText = someFunc.toString();
+
+    return new Function
+    (
+        /\(([\s\S]*?)\)/.exec(someFunc)[1],
+        someFuncAsText.substring(someFuncAsText.indexOf("{") + 1, someFuncAsText.lastIndexOf("}"))
+    );
+}
+
 function deepObjCopy (dupeObj) {
     var retObj = new Object();
     if (typeof(dupeObj) == 'object') {
@@ -217,6 +244,8 @@ function deepObjCopy (dupeObj) {
         for (var objInd in dupeObj) {   
             if (typeof(dupeObj[objInd]) == 'object') {
                 retObj[objInd] = deepObjCopy(dupeObj[objInd]);
+            } else if(typeof(dupeObj[objInd]) == 'function') {
+            	retObj[objInd] = cloneFunc(dupeObj[objInd]);
             } else if (typeof(dupeObj[objInd]) == 'string') {
                 retObj[objInd] = dupeObj[objInd];
             } else if (typeof(dupeObj[objInd]) == 'number') {
@@ -276,12 +305,20 @@ function importSave(){
 		init();
 		$.extend(true, player, startPlayer, JSON.parse(atob(importText)));
 		versionControl(true);
-		if(player.upgrades[1] == 24) player.upgradeCosts[1] = Infinity;
+		fixJSON();
 		save();
 		calcGlobalMult();
 		$("#currentNumToBuy").html(player.numToBuy);
 		
 		updateAll();
+	}
+}
+
+function fixJSON(){
+	for(var i = 0; i < player.achievements.length; i++){
+		if(typeof(player.achievements[i].time) != 'undefined'){
+			player.achievements[i].time = new Date(player.achievements[i].time);
+		}
 	}
 }
 
@@ -493,6 +530,35 @@ function updateStats(){
 	$("#statContainer").html(newStats);
 }
 
+function updateAchievements(){
+	var cheevList = jQuery.makeArray($("#achievementContainer .achievement"));
+	var cheevIndex = 0;
+	var changed = false;
+	for(var i = 0; i < player.achievements.length; i++){
+		var achievement = player.achievements[i];
+		checkAchievement(i);
+		if(achievement.achieved){
+			if(typeof(cheevList[cheevIndex]) == 'undefined' || achievement.name != cheevList[cheevIndex].innerHTML){
+				var element = document.createElement("div");
+				element.setAttribute("class", "achievement");
+				var tooltip = "<p>" + achievement.text + "</p><p>Earned at " + achievement.time.toLocaleTimeString() + " " + achievement.time.toLocaleDateString() + "</p>";
+				element.setAttribute("title", tooltip);
+				element.innerHTML = achievement.name;
+				cheevList.splice(cheevIndex, 0, element);
+				$(element).tooltip({show:false, hide:false});
+				changed = true;
+			}
+			cheevIndex++;
+		}
+	}
+	if(changed){
+		document.getElementById("achievementContainer").innerHTML = "<p>Achievements</p>";
+		for(var i = 0; i < cheevList.length; i++){
+			document.getElementById("achievementContainer").appendChild(cheevList[i]);
+		}
+	}
+}
+
 function updatePrestige(){
 	var newPrestige = prestigeTemplate({tier1Resets: player.numResets[0], tier1ResetCurr: displayNum(player.resetCurr[0], false), tier1GlobalMult: displayNum(globalMult[0], false), tier1CurrTracker: displayNum(player.resetCurrTracker, false),
 										tier2Resets: player.numResets[1], tier2ResetCurr: displayNum(player.resetCurr[1], false), tier2GlobalMult: displayNum(globalMult[1], false), tier2CurrTracker: displayNum(Math.floor(player.resetCurr[0] / player.resetCurrFactor), false),
@@ -616,6 +682,7 @@ function updateAll(){
     updateInventory();
     updateUpgrades();
     updateStats();
+    updateAchievements();
     updatePrestige();
     updateResetCurrBuyables();
 }
@@ -714,6 +781,7 @@ $(document).ready(function(){
 	
 	versionControl(false);
 	
+	fixJSON();
 	if(player.upgrades[1] == 24) player.upgradeCosts[1] = Infinity; //deals with JSON's incompatibility with Infinity
 	
 	$("#version").html(player.versionNum);
@@ -1026,6 +1094,7 @@ var update = function(){
 		
 		case 4:
 			updateStats();
+			updateAchievements();
 			break;
 	}
 	updateMoney();

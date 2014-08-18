@@ -500,10 +500,20 @@
 				<!-- End Options Tab -->
 				<!-- Begin Stats Tab -->
 				<div id="stats">
-					<div id="statContainer"></div>
+					<div id="statAchievementContainer">
+						<div id="statContainer"></div>
+						<div id="achievementContainer">
+							<p>Achievements</p>
+						</div>
+					</div>
 					<div id="chartStuff">
 						<div id="chartContainer"></div>
 						<div class="buttonLit" id="chartAxisToggle">Toggle Chart Axis</div>
+						<div id="chartSettings">
+							<input id="chartPointDelay" type="number" placeholder="Delay (ms)" />
+							<input id="chartNumPoints" type="number" placeholder="# points" />
+							<div class="buttonLit" id="submitChartSettings">Submit</div>
+						</div>
 					</div>
 				</div>
 				<script type="text/template" id="statsTemplate">

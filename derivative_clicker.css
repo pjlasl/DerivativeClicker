@@ -132,19 +132,27 @@ body {
 	margin-bottom: 20px;
 }
 
-#statTable, #resetTable{
+#resetTable{
 	display: inline;
 	margin: auto;
 	float: left;
 }
 
-#chartContainer{
+#statAchievementContainer {
+	float: left;
+	width: 45%;
+}
+
+#chartStuff{
 	float: right;
+}
+
+#chartContainer{
 	height: 400px;
 	width: 600px;
 }
 
-#chartAxisToggle{
+#chartAxisToggle, #submitChartSettings{
 	float: right;
 	clear: both;
 	text-align: center;
@@ -152,6 +160,25 @@ body {
 	padding: 1px 5px;
 	font-weight: bold;
 	width: 150px;
+}
+
+#chartPointDelay, #chartNumPoints {
+	width: 200px;
+	margin-top: 10px;
+}
+
+#submitChartSettings {
+	display: inline-block;
+}
+
+#chartSettings {
+	float: right;
+	clear: both;
+}
+
+#achievementContainer{
+	clear: left;
+	margin-top: 10px;
 }
 
 #prestige {
@@ -278,6 +305,13 @@ body {
 	font-size: 30px;
 	width: 250px;
 	height: 20px;
+}
+
+.achievement {
+	border: 1px solid black;
+	border-radius: 5px;
+	display: inline-block;
+	margin: 1px;
 }
 
 /* General classes */
