@@ -93,7 +93,7 @@ var startPlayer = {
 				   new Achievement("Fermat's Last Theorem", "Have 7 billion Andrew Wiles", "player.buildings[9].owned > 7e9"), new Achievement("Incompleteness Theorem", "Have 7 billion Kurt Godels", "player.buildings[14].owned > 7e9"),
 				   new Achievement("Riemann Sums", "Have 7 billion Bernhard Riemanns", "player.buildings[19].owned > 7e9"), new Achievement("Fundamental Theorem of Algebra", "Have 7 billion Carl Gauss", "player.buildings[24].owned > 7e9"),
 				   new Achievement("Euler's Identity", "Have 7 billion Leonhard Eulers", "player.buildings[29].owned > 7e9"), new Achievement("Calculus", "Have 7 billion Isaac Newtons", "player.buildings[34].owned > 7e9"),
-				   new Achievement("Start From Scratch", "Do a tier 1 reset", "player.numResets[0] > 0"), new Achievement("High Tier", "Do a tier 6 reset", "player.numResets[6] > 0"),
+				   new Achievement("Start From Scratch", "Do a tier 1 reset", "player.numResets[0] > 0"), new Achievement("High Tier", "Do a tier 6 reset", "player.numResets[5] > 0"),
 				   new Achievement("Millionaire", "Make a million dollars in total", "player.totalMoneyEarned > 1e6"), new Achievement("Billionaire", "Make a billion dollars in total", "player.totalMoneyEarned > 1e9"),
 				   new Achievement("...Quadrillionaire?", "Make a quadrillion dollars in total", "player.totalMoneyEarned > 1e15"), new Achievement("Decillionaire", "Make a decillion dollars in total", "player.totalMoneyEarned > 1e33"),
 				   new Achievement("Vigintillionaire", "Make a vigintillion dollars in total", "player.totalMoneyEarned > 1e63"), new Achievement("Yeah this isn't a real thing", "Make a trigintillion dollars in total", "player.totalMoneyEarned > 1e93"),
@@ -385,7 +385,7 @@ function reset(tier) {
 				proofsPerSecond: 0,
 				costPerProof: 5,
 				deriv1Money: 0.05,
-				buildings: [new Building(1.1, 0.1, 0), new Building(1.1, 25000, 0), new Building(1.3, 0, 2), new Building(1.1, 5, 0), new Building(1.05, 1000, 0),
+				buildings: [new Building(1.1, 0.1, 0), new Building(1.1, 25000, 0), new Building(1.3, 0, 3), new Building(1.1, 5, 0), new Building(1.05, 1000, 0),
 							 new Building(1.2, 500, 0), new Building(1.3, 20000000, 0), new Building(1.8, 0, 20000), new Building(1.2, 1000, 0), new Building(1.2, 100000000, 0),
 							 new Building(1.3, 20000, 0), new Building(1.8, 1000000000, 0), new Building(2.5, 0, 1000000), new Building(1.4, 100000, 0), new Building(1.5, 10000000000000, 0),
 							 new Building(1.5, 1000000, 1000), new Building(2.5, 500000000000, 0), new Building(4, 0, 30000000), new Building(2, 10000000, 0), new Building(2, 1000000000000000000, 0),
@@ -581,7 +581,11 @@ function updateResetCurrBuyables(){
     
     if(typeof this.originalTitles == "undefined"){ //stores original titles of buttons
         this.originalTitles = new Array(buttonList.length);
-        for(var i = 0; i < buttonList.length; i++) this.originalTitles[i] = buttonList[i].title;
+        this.originalHtmlContents = new Array(buttonList.length);
+        for(var i = 0; i < buttonList.length; i++){
+        	this.originalTitles[i] = buttonList[i].title;
+        	this.originalHtmlContents[i] = buttonList[i].innerHTML;
+        }
     }
     
     for(var i = 0; i < buttonList.length; i++){
@@ -591,7 +595,8 @@ function updateResetCurrBuyables(){
             buttonList[i].title += "<div class='strong'>Owned</div>";
             buttonList[i].className = "button";
             continue;
-        } 
+        }
+        else buttonList[i].innerHTML = this.originalHtmlContents[i];
         if (i % 6 != 0){
             if(!player.currBuyables[i - 1].owned){
                 buttonList[i].title += "<div class='strong'>Not unlocked</div>";
