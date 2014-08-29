@@ -568,7 +568,7 @@ function updatePrestige(){
 										tier5Resets: player.numResets[4], tier5ResetCurr: displayNum(player.resetCurr[4], false), tier5GlobalMult: displayNum(globalMult[4], false), tier5CurrTracker: displayNum(Math.floor(player.resetCurr[3] / player.resetCurrFactor), false),
 										tier6Resets: player.numResets[5], tier6ResetCurr: displayNum(player.resetCurr[5], false), tier6GlobalMult: displayNum(globalMult[5], false), tier6CurrTracker: displayNum(Math.floor(player.resetCurr[4] / player.resetCurrFactor), false),
 										proofsToNextCurr: displayNum(player.proofsToNextCurr, false), mathematiciansToNextCurr: displayNum(player.mathematiciansToNextCurr, false),
-										proofsToNextCurrMax: displayNum(10 * Math.pow(10 * (10 + player.proofsToCurrTracker), 6), false), mathematiciansToNextCurrMax: displayNum(10 * Math.pow(10 * (10 + player.mathematiciansToNextCurr), 6), false)});
+										proofsToNextCurrMax: displayNum(10 * Math.pow(10 * (10 + player.proofsToCurrTracker), 6), false), mathematiciansToNextCurrMax: displayNum(7000 * Math.pow(10 + player.mathematiciansToNextCurrTracker, 6), 6), false)});
 	$("#prestige").html(newPrestige);
 }
 
