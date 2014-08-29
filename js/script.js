@@ -567,7 +567,10 @@ function updatePrestige(){
 										tier4Resets: player.numResets[3], tier4ResetCurr: displayNum(player.resetCurr[3], false), tier4GlobalMult: displayNum(globalMult[3], false), tier4CurrTracker: displayNum(Math.floor(player.resetCurr[2] / player.resetCurrFactor), false),
 										tier5Resets: player.numResets[4], tier5ResetCurr: displayNum(player.resetCurr[4], false), tier5GlobalMult: displayNum(globalMult[4], false), tier5CurrTracker: displayNum(Math.floor(player.resetCurr[3] / player.resetCurrFactor), false),
 										tier6Resets: player.numResets[5], tier6ResetCurr: displayNum(player.resetCurr[5], false), tier6GlobalMult: displayNum(globalMult[5], false), tier6CurrTracker: displayNum(Math.floor(player.resetCurr[4] / player.resetCurrFactor), false),
-										proofsToNextCurr: displayNum(player.proofsToNextCurr, false), mathematiciansToNextCurr: displayNum(player.mathematiciansToNextCurr, false)});
+										proofsToNextCurr: displayNum(player.proofsToNextCurr, false), mathematiciansToNextCurr: displayNum(player.mathematiciansToNextCurr, false),
+										proofsToNextCurrMax: displayNum(10 * Math.pow(10 * (10 + player.proofsToCurrTracker), 6), false), mathematiciansToNextCurrMax: displayNum(7000 * Math.pow(10 + player.mathematiciansToNextCurrTracker, 6), false),
+										proofsPerTick: displayNum(player.proofsPerSecond, false), mathematiciansPerPeriod: displayNum(Math.round(player.mult[1] * globalMult[1] * player.buildings[9].owned), false),
+										buildingPeriod: player.buildingInterval});
 	$("#prestige").html(newPrestige);
 }
 
