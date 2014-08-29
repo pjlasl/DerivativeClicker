@@ -111,7 +111,7 @@ var startPlayer = {
 
 var player = deepObjCopy(startPlayer);
 
-var versionNum = 0.33;
+var versionNum = 0.331;
 
 //these variables hold constants between plays
 var upgradeCostFactor = [1.5, 100];
