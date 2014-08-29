@@ -66,27 +66,43 @@ body {
 	text-align: center;
 }
 
-#moneyTable {
+#infoContainer {
 	margin-left: auto;
 	margin-right: auto;
+	text-align: center;
+	height: 70px;
+	margin-bottom: 10px;
 }
 
 #moneyButton {
-	margin-left: auto;
-	margin-right: auto;
-	display: block;
-	height: 40px;
+	display: inline-block;
+	height: 70px;
 	width: 200px;
 	background-color: #D4DAFC;
 	font-size: 16px;
+	margin-right: 10px;
+	vertical-align: top;
 }
 
 #moneyButtonText {
-	line-height: 40px;
+	line-height: 70px;
 }
 
-#mPC, #mPAC, #tickLenCell{
-	text-align: center;
+#info {
+	display: inline-block;
+	text-align: left;
+	white-space: nowrap;
+	margin-bottom: -8px;
+}
+
+#moneyTable {
+	float: left;
+	display: inline-block;
+}
+
+#moneyTable2 {
+	float: right;
+	display: inline-block;
 }
 
 #inventoryTable, #row5, #row6, #row7{

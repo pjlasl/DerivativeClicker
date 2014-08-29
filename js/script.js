@@ -496,7 +496,7 @@ function updateInventory() {
 	else $("#row7").html(null);
 	
 	//updates whether buttons are lit using a list of buttons	
-	buttonList = jQuery.makeArray($("#tableContainer div table tr .button"));
+	var buttonList = jQuery.makeArray($("#tableContainer div table tr .button"));
 	
 	if(player.numToBuy == "Max"){
 		for(var i = 0; i < buttonList.length; i++){
@@ -542,23 +542,22 @@ function updateAchievements(){
 				var element = document.createElement("div");
 				element.setAttribute("class", "achievement");
 				var tooltip = achievement.text + "<br />Earned at " + achievement.time.toLocaleTimeString() + " " + achievement.time.toLocaleDateString();
-				element.title = tooltip;
+				$(element).tooltipster({content: tooltip, theme: 'tooltipster-noir', contentAsHTML: true, delay: 0, speed: 200});
 				element.innerHTML = achievement.name;
 				cheevList.splice(cheevIndex, 0, element);
-				$(element).tooltip({show:false, hide:false, content: function () {
-			    	return this.getAttribute("title");
-				}});
 				changed = true;
 			}
 			cheevIndex++;
 		}
 	}
 	if(changed){
-		document.getElementById("achievementContainer").innerHTML = "<p>Achievements</p>";
 		for(var i = 0; i < cheevList.length; i++){
 			document.getElementById("achievementContainer").appendChild(cheevList[i]);
 		}
 	}
+	
+	$("#numAchievementsEarned").html(cheevList.length);
+	$("#numAchievementsTotal").html(player.achievements.length);
 }
 
 function updatePrestige(){
@@ -573,35 +572,31 @@ function updatePrestige(){
 }
 
 function updateResetCurrBuyables(){
-    var buttonListProto = jQuery.makeArray($("#resetCurrTable tr td .button, #resetCurrTable tr td .buttonLit"));
+	var $resetCurrTable = $("#resetCurrTable tr td .button, #resetCurrTable tr td .buttonLit")
+    var buttonListProto = jQuery.makeArray($resetCurrTable);
     var buttonList = new Array(buttonListProto.length);
     for(i = 0; i < buttonListProto.length; i++){ //reorder elements to be in data order instead of DOM order
         buttonList[(i%4)*6 + Math.floor(i/4)] = buttonListProto[i];
     }
     
-    if(typeof this.originalTitles == "undefined"){ //stores original titles of buttons
-        this.originalTitles = new Array(buttonList.length);
-        this.originalHtmlContents = new Array(buttonList.length);
-        for(var i = 0; i < buttonList.length; i++){
-        	this.originalTitles[i] = buttonList[i].title;
-        	this.originalHtmlContents[i] = buttonList[i].innerHTML;
-        }
-    }
-    
     for(var i = 0; i < buttonList.length; i++){
-        buttonList[i].title = this.originalTitles[i];
+    	var altIndex = (i%6)*4 + Math.floor(i/6);
         if (player.currBuyables[i].owned){
             buttonList[i].innerHTML = "X";
-            buttonList[i].title += "<div class='strong'>Owned</div>";
             buttonList[i].className = "button";
+            $resetCurrTable.eq(altIndex).tooltipster('content', updateResetCurrBuyables.originalTitles[i] + "<div class='strong'>Owned</div>");
             continue;
         }
-        else buttonList[i].innerHTML = this.originalHtmlContents[i];
+        else {
+        	buttonList[i].innerHTML = updateResetCurrBuyables.originalHtmlContents[i];
+        	$resetCurrTable.eq(altIndex).tooltipster('content', updateResetCurrBuyables.originalTitles[i]);
+        }
         if (i % 6 != 0){
             if(!player.currBuyables[i - 1].owned){
-                buttonList[i].title += "<div class='strong'>Not unlocked</div>";
+                $resetCurrTable.eq(altIndex).tooltipster('content', updateResetCurrBuyables.originalTitles[i] + "<div class='strong'>Not unlocked</div>");
                 continue;
             }
+            else $resetCurrTable.eq(altIndex).tooltipster('content', updateResetCurrBuyables.originalTitles[i]);
         }
         var afford = true;
         for (var j = 0; j < numTiers - 1; j++){
@@ -612,7 +607,6 @@ function updateResetCurrBuyables(){
             }
         }
         if(!afford) continue;
-        
         buttonList[i].className = "buttonLit";
     }
 }
@@ -799,9 +793,17 @@ $(document).ready(function(){
 	$("#currentNumToBuy2").html(player.numToBuy);
 	$("#minTickLength").html(player.minTickLength);
 	
-	$("#resetCurrTable tr td .buttonLit, #resetCurrTable tr td .button").tooltip({show: false, hide: false, content: function () {
-    	return this.getAttribute("title");
-	}});
+	//stores original titles of buttons
+	var $resetCurrTable = $("#resetCurrTable tr td .button, #resetCurrTable tr td .buttonLit");
+	var buttonListProto = jQuery.makeArray($resetCurrTable);
+    updateResetCurrBuyables.originalTitles = new Array(buttonListProto.length);
+    updateResetCurrBuyables.originalHtmlContents = new Array(buttonListProto.length);
+    for(var i = 0; i < buttonListProto.length; i++){
+    	updateResetCurrBuyables.originalTitles[i] = buttonListProto[(i%6)*4 + Math.floor(i/6)].title;
+    	updateResetCurrBuyables.originalHtmlContents[i] = buttonListProto[(i%6)*4 + Math.floor(i/6)].innerHTML;
+    }
+	
+	$("#resetCurrTable tr td .buttonLit, #resetCurrTable tr td .button").tooltipster({theme: 'tooltipster-noir', contentAsHTML: true, delay: 0, speed: 200});
 
 	for(i = 1; i <= numTiers; i++){
 		calcMult(i);
@@ -1081,7 +1083,7 @@ var update = function(){
 		
 		player.updateInterval = 1000 * Math.pow(0.98, Math.log(player.buildings[4].owned * player.mult[0] * globalMult[0] + 1));
 		
-		//this fixes minimization by running until the interval tracker is less than 0 if the thing isn't active
+		//updateResetCurrBuyables fixes minimization by running until the interval tracker is less than 0 if the thing isn't active
 		if(!isActive) update.intervalTracker -= player.updateInterval * player.timeMult;
 		
 	}while(!isActive && update.intervalTracker > 0 && elapsedTime > player.updateInterval);

@@ -1,5 +1,8 @@
 Changelog:
 
+Version 0.331 (08/17/2014)
+Made tooltips less ugly, edited upper section of UI, added achievement number display
+
 Version 0.33 (08/17/2014)
 Added base achievement code and a few achievements, added chart options, fixed bug with costs of click booster
 
