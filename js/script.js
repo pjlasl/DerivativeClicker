@@ -1044,33 +1044,29 @@ var update = function(){
 		}
 		
 		//checks if enough proofs/mathematicians for reset currency: if so, adds reset currency
-		if(player.proofsToNextCurr > -10000 * Math.pow(10 * (10 + player.proofsToCurrTracker), 6)){
-			while(player.proofsToNextCurr < 0){
-				player.resetCurrTracker++;
-				player.proofsToCurrTracker++;
-				player.proofsToNextCurr += 10 * Math.pow(10 * (10 + player.proofsToCurrTracker), 6);
-			}
-		}
-		else{
+		if(player.proofsToNextCurr <= -10000 * Math.pow(10 * (10 + player.proofsToCurrTracker), 6)){
 			var currToGain = Math.ceil(Math.pow(-player.proofsToNextCurr/(10000000/7) + Math.pow(10+player.proofsToCurrTracker, 7), 1/7)) - 10 - player.proofsToCurrTracker; //approximate reset curr gained without while loop
 			if(-player.proofsToNextCurr > 1e106) currToGain += currToGain / 1e6; //deals with inaccuracy in numbering
-			player.proofsToNextCurr += 10000000/7 * (Math.pow(10 + currToGain + player.proofsToCurrTracker, 7) - Math.pow(10 + player.proofsToCurrTracker - 1, 7));
+			player.proofsToNextCurr += 10000000/7 * (Math.pow(10 + currToGain + player.proofsToCurrTracker, 7) - Math.pow(10 + player.proofsToCurrTracker, 7));
 			player.resetCurrTracker += currToGain;
 			player.proofsToCurrTracker += currToGain;
 		}
-		
-		if(player.mathematiciansToNextCurr > -7000000 * Math.pow(10 + player.mathematiciansToNextCurrTracker, 6)){
-			while(player.mathematiciansToNextCurr < 0){
-				player.resetCurrTracker++;
-				player.mathematiciansToNextCurrTracker++;
-				player.mathematiciansToNextCurr += 7000 * Math.pow(10 + player.mathematiciansToNextCurrTracker, 6)
-			}
+		while(player.proofsToNextCurr < 0){
+			player.resetCurrTracker++;
+			player.proofsToCurrTracker++;
+			player.proofsToNextCurr += 10 * Math.pow(10 * (10 + player.proofsToCurrTracker), 6);
 		}
-		else{
+		
+		if(player.mathematiciansToNextCurr <= -7000000 * Math.pow(10 + player.mathematiciansToNextCurrTracker, 6)){
 			var currToGain = Math.ceil(Math.pow(-player.mathematiciansToNextCurr/1000 + Math.pow(10+player.mathematiciansToNextCurrTracker, 7), 1/7)) - 10 - player.mathematiciansToNextCurrTracker; //approximate reset curr gained without while loop
-			player.mathematiciansToNextCurr += 1000 * (Math.pow(10 + currToGain + player.mathematiciansToNextCurrTracker, 7) - Math.pow(10 + player.mathematiciansToNextCurrTracker - 1, 5));
+			player.mathematiciansToNextCurr += 1000 * (Math.pow(10 + currToGain + player.mathematiciansToNextCurrTracker, 7) - Math.pow(10 + player.mathematiciansToNextCurrTracker, 5));
 			player.resetCurrTracker += currToGain;
 			player.mathematiciansToNextCurrTracker += currToGain;
+		}
+		while(player.mathematiciansToNextCurr < 0){
+			player.resetCurrTracker++;
+			player.mathematiciansToNextCurrTracker++;
+			player.mathematiciansToNextCurr += 7000 * Math.pow(10 + player.mathematiciansToNextCurrTracker, 6)
 		}
 		
 		//recalculates money/proofs per tick
