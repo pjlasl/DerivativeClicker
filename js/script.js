@@ -525,7 +525,11 @@ function updateInventory() {
 function updateStats(){
 	var newStats = statsTemplate({totalMoneyEarned: displayNum(player.totalMoneyEarned, true), totalProofs: displayNum(player.totalProofs, false),
 								totalClicks: displayNum(player.totalClicks, false), totalManualClicks: displayNum(player.totalManualClicks, false), 
-								totalTicks: displayNum(player.totalTicks, false), timeMult: displayNum(player.timeMult, false)});
+								totalTicks: displayNum(player.totalTicks, false), timeMult: displayNum(player.timeMult, false),
+								totalCurrByProof: displayNum(player.proofsToCurrTracker,false),
+								totalCurrByMaths: displayNum(player.mathematiciansToNextCurrTracker,false),
+								totalResetCurr: displayNum(player.mathematiciansToNextCurrTracker + player.proofsToCurrTracker,false)
+								});
   
 	$("#statContainer").html(newStats);
 }
