@@ -322,6 +322,12 @@ function fixJSON(){
 	}
 }
 
+function toggleSciNotation(){
+	player.sciNotation = !player.sciNotation;
+	updateResetCurrBuyablesTitles();
+    updateResetCurrBuyables();
+}
+
 function setMinTickLength(){
     var minTickLength;
     do{
@@ -618,6 +624,33 @@ function updateResetCurrBuyables(){
     }
 }
 
+function updateResetCurrBuyablesTitles(){
+	updateResetCurrBuyables.originalTitles[0] = "Unlocks tier 5.<br /> Costs " + displayNum(10, false) + " tier 1 reset currency.";
+	updateResetCurrBuyables.originalTitles[1] = "Unlocks tier 6.<br /> Costs " + displayNum(50, false) + " tier 2 reset currency.";
+	updateResetCurrBuyables.originalTitles[2] = "Unlocks tier 7.<br /> Costs " + displayNum(100, false) + " tier 3 reset currency.";
+	updateResetCurrBuyables.originalTitles[3] = "Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs " + displayNum(100, false) + " tier 4 reset currency.";
+	updateResetCurrBuyables.originalTitles[4] = "Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs " + displayNum(100, false) + " tier 5 reset currency.";
+	updateResetCurrBuyables.originalTitles[5] = "Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs " + displayNum(100, false) + " tier 6 reset currency.";
+	updateResetCurrBuyables.originalTitles[6] = "Reduces clicks for new clicker buildings by 5.<br /> Costs " + displayNum(1000, false) + " tier 1 reset currency.";
+	updateResetCurrBuyables.originalTitles[7] = "Reduces clicks for new clicker buildings by 5.<br /> Costs " + displayNum(1000, false) + " tier 2 reset currency.";
+	updateResetCurrBuyables.originalTitles[8] = "Reduces clicks for new clicker buildings by 4.<br /> Costs " + displayNum(2000, false) + " tier 3 reset currency.";
+	updateResetCurrBuyables.originalTitles[9] = "Reduces clicks for new clicker buildings by 3.<br /> Costs " + displayNum(5000, false) + " tier 4 reset currency.";
+	updateResetCurrBuyables.originalTitles[10] = "Reduces clicks for new clicker buildings by 2.<br /> Costs " + displayNum(10000, false) + " tier 5 reset currency.";
+	updateResetCurrBuyables.originalTitles[11] = "Reduces clicks for new clicker buildings by 2.<br /> Costs " + displayNum(20000, false) + " tier 6 reset currency.";
+	updateResetCurrBuyables.originalTitles[12] = "Reduces ticks for new buildings by 1.<br /> Costs " + displayNum(100000, false) + " tier 1 reset currency.";
+	updateResetCurrBuyables.originalTitles[13] = "Reduces ticks for new buildings by 1.<br /> Costs " + displayNum(100000, false) + " tier 2 reset currency.";
+	updateResetCurrBuyables.originalTitles[14] = "Reduces ticks for new buildings by 1.<br /> Costs " + displayNum(200000, false) + " tier 3 reset currency.";
+	updateResetCurrBuyables.originalTitles[15] = "Reduces ticks for new buildings by 1.<br /> Costs " + displayNum(200000, false) + " tier 4 reset currency.";
+	updateResetCurrBuyables.originalTitles[16] = "Reduces ticks for new buildings by 1.<br /> Costs " + displayNum(500000, false) + " tier 5 reset currency.";
+	updateResetCurrBuyables.originalTitles[17] = "Reduces ticks for new buildings by 1.<br /> Costs " + displayNum(500000, false) + " tier 6 reset currency.";
+	updateResetCurrBuyables.originalTitles[18] = "Reduces ticks between autoclicks by 10.<br /> Costs " + displayNum(10000000, false) + " tier 1 reset currency.";
+	updateResetCurrBuyables.originalTitles[19] = "Reduces ticks between autoclicks by 10.<br /> Costs " + displayNum(10000000, false) + " tier 2 reset currency.";
+	updateResetCurrBuyables.originalTitles[20] = "Reduces ticks between autoclicks by 10.<br /> Costs " + displayNum(20000000, false) + " tier 3 reset currency.";
+	updateResetCurrBuyables.originalTitles[21] = "Reduces reset currency conversion factor by 1.<br /> Costs " + displayNum(1000000000, false) + " tier 4 reset currency.";
+	updateResetCurrBuyables.originalTitles[22] = "Reduces reset currency conversion factor by 1.<br /> Costs " + displayNum(2000000000, false) + " tier 5 reset currency.";
+	updateResetCurrBuyables.originalTitles[23] = "Reduces reset currency conversion factor by 1.<br /> Costs " + displayNum(5000000000, false) + " tier 6 reset currency.";
+}
+
 function ifUnlockedTier(tier){
 	return player.currBuyables[tier - 5].owned;
 }
@@ -803,12 +836,12 @@ $(document).ready(function(){
 	//stores original titles of buttons
 	var $resetCurrTable = $("#resetCurrTable tr td .button, #resetCurrTable tr td .buttonLit");
 	var buttonListProto = jQuery.makeArray($resetCurrTable);
-    updateResetCurrBuyables.originalTitles = new Array(buttonListProto.length);
     updateResetCurrBuyables.originalHtmlContents = new Array(buttonListProto.length);
     for(var i = 0; i < buttonListProto.length; i++){
-    	updateResetCurrBuyables.originalTitles[i] = buttonListProto[(i%6)*4 + Math.floor(i/6)].title;
     	updateResetCurrBuyables.originalHtmlContents[i] = buttonListProto[(i%6)*4 + Math.floor(i/6)].innerHTML;
     }
+    updateResetCurrBuyables.originalTitles = new Array(24);
+	updateResetCurrBuyablesTitles();
 	
 	$("#resetCurrTable tr td .buttonLit, #resetCurrTable tr td .button").tooltipster({theme: 'tooltipster-noir', contentAsHTML: true, delay: 0, speed: 200});
 

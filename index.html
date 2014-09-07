@@ -499,7 +499,7 @@
 						<td class="spacer" colspan="2"></td>
 					</tr>
 					<tr>
-						<td class="buttonLit option" onclick="player.sciNotation = !player.sciNotation">Toggle Numbers</td>
+						<td class="buttonLit option" onclick="toggleSciNotation()">Toggle Numbers</td>
 						<td class="spacer"></td>
 						<td>Toggles numbers between suffixes and scientific.</td>
 					</tr>
@@ -579,50 +579,50 @@
 						<thead><td>Buyables</td></thead>
 						<tr>
 							<td>
-								<div class="button" onmousedown="buyCurrBuyable(0)" title="Unlocks tier 5.<br /> Costs 10 tier 1 reset currency.">T</div>
-								<div class="button" onmousedown="buyCurrBuyable(6)" title="Reduces clicks for new clicker buildings by 5.<br /> Costs 1.00K tier 1 reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(12)" title="Reduces ticks for new buildings by 1.<br /> Costs 100.00K tier 1 reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(18)" title="Reduces ticks between autoclicks by 10.<br /> Costs 10.00M tier 1 reset currency.">A</div>
+								<div class="button" onmousedown="buyCurrBuyable(0)">T</div>
+								<div class="button" onmousedown="buyCurrBuyable(6)">C</div>
+								<div class="button" onmousedown="buyCurrBuyable(12)">B</div>
+								<div class="button" onmousedown="buyCurrBuyable(18)">A</div>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<div class="button" onmousedown="buyCurrBuyable(1)" title="Unlocks tier 6.<br /> Costs 50 tier 2 reset currency.">T</div>
-								<div class="button" onmousedown="buyCurrBuyable(7)" title="Reduces clicks for new clicker buildings by 5.<br /> Costs 1.00K tier 2 reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(13)" title="Reduces ticks for new buildings by 1.<br /> Costs 100.00K tier 2 reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(19)" title="Reduces ticks between autoclicks by 10.<br /> Costs 10.00M tier 2 reset currency.">A</div>
+								<div class="button" onmousedown="buyCurrBuyable(1)">T</div>
+								<div class="button" onmousedown="buyCurrBuyable(7)">C</div>
+								<div class="button" onmousedown="buyCurrBuyable(13)">B</div>
+								<div class="button" onmousedown="buyCurrBuyable(19)">A</div>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<div class="button" onmousedown="buyCurrBuyable(2)" title="Unlocks tier 7.<br /> Costs 100 tier 3 reset currency.">T</div>
-								<div class="button" onmousedown="buyCurrBuyable(8)" title="Reduces clicks for new clicker buildings by 4.<br /> Costs 2.00K tier 3 reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(14)" title="Reduces ticks for new buildings by 1.<br /> Costs 200.00K tier 3 reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(20)" title="Reduces ticks between autoclicks by 10.<br /> Costs 20.00M tier 3 reset currency.">A</div>
+								<div class="button" onmousedown="buyCurrBuyable(2)">T</div>
+								<div class="button" onmousedown="buyCurrBuyable(8)">C</div>
+								<div class="button" onmousedown="buyCurrBuyable(14)">B</div>
+								<div class="button" onmousedown="buyCurrBuyable(20)">A</div>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<div class="button" onmousedown="buyCurrBuyable(3)" title="Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs 100 tier 4 reset currency.">F</div>
-								<div class="button" onmousedown="buyCurrBuyable(9)" title="Reduces clicks for new clicker buildings by 3.<br /> Costs 5.00K tier 4 reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(15)" title="Reduces ticks for new buildings by 1.<br /> Costs 200.00K tier 4 reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(21)" title="Reduces reset currency conversion factor by 1.<br /> Costs 1.00B tier 4 reset currency.">R</div>
+								<div class="button" onmousedown="buyCurrBuyable(3)">F</div>
+								<div class="button" onmousedown="buyCurrBuyable(9)">C</div>
+								<div class="button" onmousedown="buyCurrBuyable(15)">B</div>
+								<div class="button" onmousedown="buyCurrBuyable(21)">R</div>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<div class="button" onmousedown="buyCurrBuyable(4)" title="Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs 100 tier 5 reset currency.">F</div>
-								<div class="button" onmousedown="buyCurrBuyable(10)" title="Reduces clicks for new clicker buildings by 2.<br /> Costs 10.00K tier 5 reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(16)" title="Reduces ticks for new buildings by 1.<br /> Costs 500.00K tier 5 reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(22)" title="Reduces reset currency conversion factor by 1.<br /> Costs 2.00B tier 5 reset currency.">R</div>
+								<div class="button" onmousedown="buyCurrBuyable(4)">F</div>
+								<div class="button" onmousedown="buyCurrBuyable(10)">C</div>
+								<div class="button" onmousedown="buyCurrBuyable(16)">B</div>
+								<div class="button" onmousedown="buyCurrBuyable(22)">R</div>
 							</td>
 						</tr>
 						<tr>
 							<td>
-								<div class="button" onmousedown="buyCurrBuyable(5)" title="Divides multiplying factor for buying buildings (past 1) by 1.1.<br /> Costs 100 tier 6 reset currency.">F</div>
-								<div class="button" onmousedown="buyCurrBuyable(11)" title="Reduces clicks for new clicker buildings by 2.<br /> Costs 20.00K tier 6 reset currency.">C</div>
-								<div class="button" onmousedown="buyCurrBuyable(17)" title="Reduces ticks for new buildings by 1.<br /> Costs 500.00K tier 6 reset currency.">B</div>
-								<div class="button" onmousedown="buyCurrBuyable(23)" title="Reduces reset currency conversion factor by 1.<br /> Costs 5.00B tier 6 reset currency.">R</div>
+								<div class="button" onmousedown="buyCurrBuyable(5)">F</div>
+								<div class="button" onmousedown="buyCurrBuyable(11)">C</div>
+								<div class="button" onmousedown="buyCurrBuyable(17)">B</div>
+								<div class="button" onmousedown="buyCurrBuyable(23)">R</div>
 							</td>
 						</tr>
 					</table>
