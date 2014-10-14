@@ -90,9 +90,9 @@ var startPlayer = {
 				   new Achievement("Quadratic Growth", "Buy a second derivative", "player.buildings[5].manual > 0"), new Achievement("Cubic Growth", "Buy a third derivative", "player.buildings[10].manual > 0"),
 				   new Achievement("Quartic Growth", "Buy a fourth derivative", "player.buildings[15].manual > 0"), new Achievement("Quintic Growth", "Buy a fifth derivative", "player.buildings[20].manual > 0"),
 				   new Achievement("Sextic Growth", "Buy a sixth derivative", "player.buildings[25].manual > 0"), new Achievement("Septic Growth", "Buy a seventh derivative", "player.buildings[30].manual > 0"),
-				   new Achievement("Fermat's Last Theorem", "Have 7 billion Andrew Wiles", "player.buildings[9].owned > 7e9"), new Achievement("Incompleteness Theorem", "Have 7 billion Kurt Godels", "player.buildings[14].owned > 7e9"),
-				   new Achievement("Riemann Sums", "Have 7 billion Bernhard Riemanns", "player.buildings[19].owned > 7e9"), new Achievement("Fundamental Theorem of Algebra", "Have 7 billion Carl Gauss", "player.buildings[24].owned > 7e9"),
-				   new Achievement("Euler's Identity", "Have 7 billion Leonhard Eulers", "player.buildings[29].owned > 7e9"), new Achievement("Calculus", "Have 7 billion Isaac Newtons", "player.buildings[34].owned > 7e9"),
+				   new Achievement("Fermat's Last Theorem", "Have an Andrew Wiles", "player.buildings[9].owned > 0"), new Achievement("Incompleteness Theorem", "Have a Kurt Godel", "player.buildings[14].owned > 0"),
+				   new Achievement("Riemann Sums", "Have a Bernhard Riemann", "player.buildings[19].owned > 0"), new Achievement("Fundamental Theorem of Algebra", "Have a Carl Gauss", "player.buildings[24].owned > 0"),
+				   new Achievement("Euler's Identity", "Have a Leonhard Euler", "player.buildings[29].owned > 0"), new Achievement("Calculus", "Have an Isaac Newton", "player.buildings[34].owned > 0"),
 				   new Achievement("Start From Scratch", "Do a tier 1 reset", "player.numResets[0] > 0"), new Achievement("High Tier", "Do a tier 6 reset", "player.numResets[5] > 0"),
 				   new Achievement("Millionaire", "Make a million dollars in total", "player.totalMoneyEarned > 1e6"), new Achievement("Billionaire", "Make a billion dollars in total", "player.totalMoneyEarned > 1e9"),
 				   new Achievement("...Quadrillionaire?", "Make a quadrillion dollars in total", "player.totalMoneyEarned > 1e15"), new Achievement("Decillionaire", "Make a decillion dollars in total", "player.totalMoneyEarned > 1e33"),
@@ -303,7 +303,7 @@ function importSave(){
 								"Warning: this will erase your current save!");
 	if(importText){
 		init();
-		$.extend(true, player, startPlayer, JSON.parse(atob(importText)));
+		$.extend(true, player, JSON.parse(atob(importText)));
 		versionControl(true);
 		fixJSON();
 		save();
@@ -351,7 +351,7 @@ function reset(tier) {
 	var index = tier - 1;
 	
 	if(player.buildings[4 + 5 * index].owned < 7000000000){
-		alert("You must have 7 billion mathematicians of tier " + tier + " to do this!")
+		alert("You must have" + displayNum(7e9, false) + "mathematicians of tier " + tier + " to do this!")
 	}
 	else{
 		var confirmationText = "Are you sure you want to reset? You will gain: \n";
