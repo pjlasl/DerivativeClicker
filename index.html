@@ -682,13 +682,21 @@
 				</table>
 				<br />
 				<table id="prestigeDataTable">
-					<tr>
+					<tr id="proofsToCurr">
 						<td>Proofs to tier 1 reset currency:</td>
 						<td><%= proofsToNextCurr %> / <%= proofsToNextCurrMax %> (+<%= proofsPerTick %> Proofs/tick)</td>
 					</tr>
-					<tr>
+					<tr id="proofCurrPerTick">
+						<td>Reset currency since last update from proofs:</td>
+						<td><%= proofCurrPerTick %></td>
+					</tr>
+					<tr id="mathematiciansToCurr">
 						<td>Mathematicians to tier 1 reset currency:</td>
 						<td><%= mathematiciansToNextCurr %> / <%= mathematiciansToNextCurrMax %> (+<%= mathematiciansPerPeriod %> Mathematicians/<%= buildingPeriod %> ticks)</td>
+					</tr>
+					<tr id="mathematicianCurrPerTick">
+						<td>Reset currency since last update from mathematicians:</td>
+						<td><%= mathematicianCurrPerTick %></td>
 					</tr>
 				</table>
 			</script>

@@ -50,6 +50,8 @@ var startPlayer = {
 	updateInterval: 1000,
 	numToBuy: 1,
 	timeMult: 1,
+	proofCurrPerTick: 0,
+	mathematicianCurrPerTick: 0,
 	
 	//these variables aren't changed by resets	
 	//statistics
@@ -406,7 +408,9 @@ function reset(tier) {
 				clickTracker: 0,
 				updateInterval: 1000,
 				timeMult: 1,
-				resetCurrTracker: 0
+				resetCurrTracker: 0,
+				proofCurrPerTick: 0,
+				mathematicianCurrPerTick: 0
 			});
 			if(player.currBuyables[3].owned){
 				for (var i = 0; i < player.buildings.length; i++){
@@ -579,9 +583,38 @@ function updatePrestige(){
 										tier6Resets: player.numResets[5], tier6ResetCurr: displayNum(player.resetCurr[5], false), tier6GlobalMult: displayNum(globalMult[5], false), tier6CurrTracker: displayNum(Math.floor(player.resetCurr[4] / player.resetCurrFactor), false),
 										proofsToNextCurr: displayNum(player.proofsToNextCurr, false), mathematiciansToNextCurr: displayNum(player.mathematiciansToNextCurr, false),
 										proofsToNextCurrMax: displayNum(10 * Math.pow(10 * (10 + player.proofsToCurrTracker), 6), false), mathematiciansToNextCurrMax: displayNum(7000 * Math.pow(10 + player.mathematiciansToNextCurrTracker, 6), false),
-										proofsPerTick: displayNum(player.proofsPerSecond, false), mathematiciansPerPeriod: displayNum(Math.round(player.mult[1] * globalMult[1] * player.buildings[9].owned), false),
+										proofsPerTick: displayNum(player.proofsPerSecond, false), proofCurrPerTick: displayNum(player.proofCurrPerTick, false), 
+										mathematiciansPerPeriod: displayNum(Math.round(player.mult[1] * globalMult[1] * player.buildings[9].owned), false),
+										mathematicianCurrPerTick: displayNum(player.mathematicianCurrPerTick, false),
 										buildingPeriod: player.buildingInterval});
 	$("#prestige").html(newPrestige);
+	
+	if(typeof updatePrestige.mathThreshold === 'undefined'){ //hysteresis
+		updatePrestige.mathThreshold = 2;
+	}
+	if(typeof updatePrestige.proofThreshold === 'undefined'){
+		updatePrestige.proofThreshold = 2;
+	}
+	
+	if(player.proofCurrPerTick > updatePrestige.mathThreshold){
+		$("#proofsToCurr").hide();
+		$("#proofCurrPerTick").show();
+		updatePrestige.mathThreshold = 1;
+	} else{
+		$("#proofsToCurr").show();
+		$("#proofCurrPerTick").hide();
+		updatePrestige.mathThreshold = 2;
+	}
+	
+	if(player.mathematicianCurrPerTick > updatePrestige.proofThreshold){
+		$("#mathematiciansToCurr").hide();
+		$("#mathematicianCurrPerTick").show();
+		updatePrestige.proofThreshold = 1;
+	} else{
+		$("#mathematiciansToCurr").show();
+		$("#mathematicianCurrPerTick").hide();
+		updatePrestige.proofThreshold = 2;
+	}
 }
 
 function updateResetCurrBuyables(){
@@ -1068,6 +1101,10 @@ var update = function(){
 		}
 		else addProofs(Math.floor(player.money / player.costPerProof));
 		
+		if(update.count >= player.buildingInterval){
+			player.mathematicianCurrPerTick = 0;
+		}
+		player.proofCurrPerTick = 0;
 		//does stuff every buildingInterval ticks
 		if(update.count >= player.buildingInterval){
 			inventoryAdder(Math.floor(update.count / player.buildingInterval));
@@ -1084,6 +1121,7 @@ var update = function(){
 		if(player.proofsToNextCurr > -10000 * Math.pow(10 * (10 + player.proofsToCurrTracker), 6)){
 			while(player.proofsToNextCurr < 0){
 				player.resetCurrTracker++;
+				player.proofCurrPerTick++;
 				player.proofsToCurrTracker++;
 				player.proofsToNextCurr += 10 * Math.pow(10 * (10 + player.proofsToCurrTracker), 6);
 			}
@@ -1093,12 +1131,14 @@ var update = function(){
 			if(-player.proofsToNextCurr > 1e106) currToGain += currToGain / 1e6; //deals with inaccuracy in numbering
 			player.proofsToNextCurr += 10000000/7 * (Math.pow(10 + currToGain + player.proofsToCurrTracker, 7) - Math.pow(10 + player.proofsToCurrTracker - 1, 7));
 			player.resetCurrTracker += currToGain;
+			player.proofCurrPerTick += currToGain;
 			player.proofsToCurrTracker += currToGain;
 		}
 		
 		if(player.mathematiciansToNextCurr > -7000000 * Math.pow(10 + player.mathematiciansToNextCurrTracker, 6)){
 			while(player.mathematiciansToNextCurr < 0){
 				player.resetCurrTracker++;
+				player.mathematicianCurrPerTick++;
 				player.mathematiciansToNextCurrTracker++;
 				player.mathematiciansToNextCurr += 7000 * Math.pow(10 + player.mathematiciansToNextCurrTracker, 6)
 			}
@@ -1108,6 +1148,7 @@ var update = function(){
 			player.mathematiciansToNextCurr += 1000 * (Math.pow(10 + currToGain + player.mathematiciansToNextCurrTracker, 7) - Math.pow(10 + player.mathematiciansToNextCurrTracker - 1, 5));
 			player.resetCurrTracker += currToGain;
 			player.mathematiciansToNextCurrTracker += currToGain;
+			player.mathematicianCurrPerTick += currToGain;
 		}
 		
 		//recalculates money/proofs per tick
