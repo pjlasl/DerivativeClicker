@@ -7,6 +7,15 @@ Github Pages hosted version of Derivative Clicker
 Changelog
 =========
 
+###Version 0.34 (01/05/2015)
+Added infini-currency tracking. Currently, these do nothing.
+
+###Version 0.331 (08/17/2014)
+Made tooltips less ugly, edited upper section of UI, added achievement number display
+
+###Version 0.33 (08/17/2014)
+Added base achievement code and a few achievements, added chart options, fixed bug with costs of click booster
+
 ###Version 0.321 (08/05/2014)
 Fixed a bug relating to reset currency buyable display, added number suffixes and link to Github repository
 
