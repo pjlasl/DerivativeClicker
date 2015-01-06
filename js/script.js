@@ -299,6 +299,11 @@ function infiniReset(){
 	
 	$.extend(true, player, deepObjCopy(infiniResetPlayer));
 	player.infiniCurr++;
+	
+	for(i = 1; i <= numTiers; i++){
+		calcMult(i);
+	}
+	calcGlobalMult();
 	updateAll();
 }
 
