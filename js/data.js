@@ -166,6 +166,15 @@ var infiniResetPlayer = {
 	clickTracker: 0,
 	updateInterval: 1000,
 	timeMult: 1,
+	proofsToNextCurr: 10000000000000,
+	proofsToCurrTracker: 0,
+	mathematiciansToNextCurr: 7000000000,
+	mathematiciansToNextCurrTracker: 0,
+	totalMoneyEarned: 0,
+	totalProofs: 0,
+	totalClicks: 0,
+	totalManualClicks: 0,
+	totalTicks: 0,
 	resetCurrTracker: 0,
 	proofCurrPerTick: 0,
 	mathematicianCurrPerTick: 0,
@@ -181,7 +190,7 @@ var infiniResetPlayer = {
 	resetCurr: [0, 0, 0, 0, 0, 0, 0]
 }
 
-var versionNum = 0.34;
+var versionNum = 0.341;
 
 //these variables hold constants between plays
 var upgradeCostFactor = [1.5, 100];

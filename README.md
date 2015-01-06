@@ -7,6 +7,9 @@ Github Pages hosted version of Derivative Clicker
 Changelog
 =========
 
+###Version 0.341 (01/06/2015)
+Fix some variables not resetting
+
 ###Version 0.34 (01/05/2015)
 Added infini-currency tracking. Currently, these do nothing.
 

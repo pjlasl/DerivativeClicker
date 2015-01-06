@@ -738,6 +738,17 @@ function versionControl(ifImport){
 	if(player.versionNum < 0.33){
 		if(isNaN(player.upgradeCosts[1])) player.upgradeCosts[1] = 10000000 * Math.pow(100, 24);
 	}
+	if(player.versionNum == 0.34){
+		player.proofsToNextCurr = 10000000000000;
+		player.proofsToCurrTracker = 0;
+		player.mathematiciansToNextCurr = 7000000000;
+		player.mathematiciansToNextCurrTracker = 0;
+		player.totalMoneyEarned = 0;
+		player.totalProofs = 0;
+		player.totalClicks = 0;
+		player.totalManualClicks = 0;
+		player.totalTicks = 0;
+	}
 	if(player.versionNum < versionNum || typeof player.versionNum == 'undefined'){
 		player.versionNum = versionNum;
 	}
