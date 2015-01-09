@@ -266,7 +266,7 @@ function reset(tier) {
 			calcGlobalMult();
 			
 			//resets variables that are erased by reset
-			$.extend(true, player, resetPlayer);
+			$.extend(true, player, deepObjCopy(resetPlayer));
 			
 			if(player.currBuyables[3].owned){
 				for (var i = 0; i < player.buildings.length; i++){
