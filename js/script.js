@@ -170,6 +170,7 @@ function wipe() {
 		init();
 		localStorage.setItem("playerStored", JSON.stringify(player));
 		calcGlobalMult();
+		$("#achievementContainer").html("");
 		
 		updateAll();
 		$("#currentNumToBuy").html(player.numToBuy);
