@@ -1052,7 +1052,7 @@ var update = function(){
 		}
 		else{
 			var currToGain = Math.ceil(Math.pow(-player.mathematiciansToNextCurr/1000 + Math.pow(10+player.mathematiciansToNextCurrTracker, 7), 1/7)) - 10 - player.mathematiciansToNextCurrTracker; //approximate reset curr gained without while loop
-			player.mathematiciansToNextCurr += 1000 * (Math.pow(10 + currToGain + player.mathematiciansToNextCurrTracker, 7) - Math.pow(10 + player.mathematiciansToNextCurrTracker - 1, 5));
+			player.mathematiciansToNextCurr += 1000 * (Math.pow(10 + currToGain + player.mathematiciansToNextCurrTracker, 7) - Math.pow(10 + player.mathematiciansToNextCurrTracker - 1, 7));
 			player.resetCurrTracker += currToGain;
 			player.mathematiciansToNextCurrTracker += currToGain;
 			player.mathematicianCurrPerTick += currToGain / player.timeMult;
