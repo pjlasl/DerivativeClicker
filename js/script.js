@@ -186,7 +186,7 @@ function save() {
 	var d = new Date();
 	$("#lastSave").html(d.toLocaleTimeString());
 	
-	ga('send', 'event', 'save', 'click', 'save'); //analytics
+	//ga('send', 'event', 'save', 'click', 'save'); //analytics
 }
 
 function load() {
@@ -312,7 +312,7 @@ function reset(tier) {
 			updateStats();
 			updatePrestige();
 			
-			ga('send', 'event', 'reset', 'click', 'reset'); //analytics
+			//ga('send', 'event', 'reset', 'click', 'reset'); //analytics
 		}
 	}
 }
