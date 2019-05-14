@@ -21,39 +21,89 @@ body {
 	text-decoration: none;
 }
 
+#donateLink {
+	text-decoration: underline;
+	color: #0000ff;
+	cursor: pointer;
+}
+
+#donate {
+	z-index: 20;
+	border: solid #000000 1px;
+	background-color: #ffffff;
+	border-radius: 4px;
+	width: 380px;
+	float: right;
+	position: absolute;
+	display: none;
+	padding: 10px;
+}
+
+#donate div{
+	height: 50px;
+	line-height: 50px;
+}
+
+#donate div span {
+	vertical-align: top;
+	display: inline-block;
+}
+
+#closeDonate {
+	margin-left: auto;
+	margin-right: auto;
+	display: block;
+	text-align: center;
+	font-size: 20px;
+	width: 100px;
+	height: 30px;
+	padding: 0px;
+}
+
 #header {
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
 }
 
-#moneyTable {
+#infoContainer {
 	margin-left: auto;
 	margin-right: auto;
+	text-align: center;
+	height: 70px;
+	margin-bottom: 10px;
 }
 
 #moneyButton {
-	margin-left: auto;
-	margin-right: auto;
-	display: block;
-	height: 40px;
+	display: inline-block;
+	height: 70px;
 	width: 200px;
 	background-color: #D4DAFC;
 	font-size: 16px;
+	margin-right: 10px;
+	vertical-align: top;
 }
 
 #moneyButtonText {
-	line-height: 40px;
+	line-height: 70px;
 }
 
-#mPC, #mPAC, #tickLenCell{
-	text-align: center;
+#info {
+	display: inline-block;
+	text-align: left;
+	white-space: nowrap;
+	margin-bottom: -8px;
 }
 
-/*#tableContainer {
-	overflow: auto;
-	height: 325px;
-}*/
+#moneyTable {
+	float: left;
+	display: inline-block;
+}
+
+#moneyTable2 {
+	float: right;
+	display: inline-block;
+}
 
 #inventoryTable, #row5, #row6, #row7{
 	margin-left: auto;
@@ -66,13 +116,13 @@ body {
 	padding-top: 0px;
 }
 
-#numToBuyContainer{
+#numToBuyContainer, #numToBuyContainer2{
 	margin-top: 30px;
 	display: block;
 	text-align: center; 
 }
 
-#numToBuy {
+#numToBuy, #numToBuy2 {
 	width: 100px;
 	text-align: center;
 	background-color: #D4DAFC;
@@ -80,13 +130,7 @@ body {
 	display: inline-block;
 }
 
-#submitNumToBuy{
-	width: auto;
-	padding: 1px 5px;
-	font-weight: bold;
-}
-
-#submitNumToBuy2{
+.submitNumToBuy{
 	width: auto;
 	padding: 1px 5px;
 	font-weight: bold;
@@ -104,19 +148,27 @@ body {
 	margin-bottom: 20px;
 }
 
-#statTable, #resetTable{
+#resetTable{
 	display: inline;
 	margin: auto;
 	float: left;
 }
 
-#chartContainer{
+#statAchievementContainer {
+	float: left;
+	width: 45%;
+}
+
+#chartStuff{
 	float: right;
+}
+
+#chartContainer{
 	height: 400px;
 	width: 600px;
 }
 
-#chartAxisToggle{
+#chartAxisToggle, #submitChartSettings{
 	float: right;
 	clear: both;
 	text-align: center;
@@ -126,13 +178,70 @@ body {
 	width: 150px;
 }
 
-#prestigeTable thead{
+#chartPointDelay, #chartNumPoints {
+	width: 200px;
+	margin-top: 10px;
+}
+
+#submitChartSettings {
+	display: inline-block;
+}
+
+#chartSettings {
+	float: right;
+	clear: both;
+}
+
+#achievementContainer{
+	clear: left;
+	margin-top: 10px;
+}
+
+#prestige {
+	float: left;
+	margin-bottom: 10px;
+}
+
+#resetCurrTable {
+	display: block;
+	border-collapse: collapse;
+	margin-top: 4px;
+}
+
+#prestigeTable thead, #resetCurrTable thead{
 	font-weight: bold;
 }
 
 #prestigeTable tr td{
 	padding-left: 20px;
 	padding-right: 20px;
+	height: 37px;
+}
+
+#resetCurrTable tr {
+	padding: 0px;
+	margin: 0px;
+}
+
+#resetCurrTable tr td {
+	width: 250px;
+	height: 35px;
+	padding: 0px;
+}
+
+#resetCurrTable tr td .buttonLit, #resetCurrTable tr td .button {
+	height: 35px;
+	width: 50px;
+	font-size: 35px;
+	line-height: 35px;
+	text-align: center;
+	display: inline-block;
+	margin: 2px;
+	float: left;
+}
+
+#prestigeDataTable {
+	clear: both;
 }
 
 #bottom{
@@ -211,8 +320,15 @@ body {
 	margin-bottom: 100px;
 	text-align: center;
 	font-size: 30px;
-	width: 300px;
+	width: 250px;
 	height: 20px;
+}
+
+.achievement {
+	border: 1px solid black;
+	border-radius: 5px;
+	display: inline-block;
+	margin: 1px;
 }
 
 /* General classes */
@@ -265,4 +381,10 @@ body {
 } 
 #tabs .ui-tabs-nav .ui-state-active a { 
     color: #000000; 
+}
+
+.ui-tooltip {
+	-webkit-box-shadow: 0 0 0;
+	box-shadow: 0 0 0;
+	background-color: #ffffff;
 }

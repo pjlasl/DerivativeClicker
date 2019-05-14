@@ -7,6 +7,51 @@ Github Pages hosted version of Derivative Clicker
 Changelog
 =========
 
+###Version 0.341 (01/06/2015)
+Fix some variables not resetting
+
+###Version 0.34 (01/05/2015)
+Added infini-currency tracking. Currently, these do nothing.
+
+###Version 0.331 (08/17/2014)
+Made tooltips less ugly, edited upper section of UI, added achievement number display
+
+###Version 0.33 (08/17/2014)
+Added base achievement code and a few achievements, added chart options, fixed bug with costs of click booster
+
+###Version 0.321 (08/05/2014)
+Fixed a bug relating to reset currency buyable display, added number suffixes and link to Github repository
+
+###Version 0.32 (08/01/2014)
+Add a new option that allows you set the minimum tick length, changed tick length display, fixed clicks to gain going negative, change initial computer price
+
+###Version 0.31 (07/28/2014)
+Make tooltips not flash
+
+###Version 0.3 (07/22/2014)
+Added reset currency buyables, which have various effects; players start with $0.10 on reset to allow for neverclick runs
+
+###Version 0.222 (07/08/2014)
+Number to buy now works with upgrades (except click improver), fixed a minor bug causing money to go negative
+
+###Version 0.221 (07/08/2014)
+Tier unlocking makes more sense, fixed negative buildings bug
+
+###Version 0.22 (07/04/2014)
+Added 7th tier, changed reset currency calculation, proper upgrade hiding, improved multiplier calculation, nerfed upgrade multipliers, added alternate number view, changed some names, made some things more efficient, rebalancing.
+
+###Version 0.21 (06/27/2014)
+Changed mathematician prestige formula to an explicit formula, bugfixes for version 0.2
+
+###Version 0.2 (06/27/2014)
+Added a sixth derivative (currently unlocked on first 2nd tier reset) as well as related sixth tier stuff, made 5th tier reset possible, refactored some code.
+
+###Version 0.184 (06/25/2014)
+Changed prestige proof formula to an explicit formula, moved update function into global namespace
+
+###Version 0.183 (06/20/2014)
+Added number suffixes to trigintillion, added total ticks statistic, added time multiplier (which multiplies everything by 10 when you get to 100 ms tick length, to speed up the game)
+
 ###Version 0.182 (06/13/2014)
 More number display fixes, buttons use onmousedown events for greater responsiveness
 
