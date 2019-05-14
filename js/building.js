@@ -8,7 +8,7 @@ function Building(factor, moneyCost, proofCost){
 
 Building.prototype.add = function(num){
 	this.owned += num;
-}
+};
 
 function CurrBuyable(cost, text){
 	this.owned = false;
@@ -17,7 +17,7 @@ function CurrBuyable(cost, text){
 
 CurrBuyable.prototype.buy = function(){
 	this.owned = true;
-}
+};
 
 function Achievement(name, text, condition){
 	this.achieved = false;

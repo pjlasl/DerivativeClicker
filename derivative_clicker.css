@@ -96,13 +96,11 @@ body {
 }
 
 #moneyTable {
-	float: left;
-	display: inline-block;
+	float: left;	
 }
 
 #moneyTable2 {
-	float: right;
-	display: inline-block;
+	float: right;	
 }
 
 #inventoryTable, #row5, #row6, #row7{
@@ -150,8 +148,7 @@ body {
 
 #resetTable{
 	display: inline;
-	margin: auto;
-	float: left;
+	margin: auto;	
 }
 
 #statAchievementContainer {
@@ -236,8 +233,7 @@ body {
 	line-height: 35px;
 	text-align: center;
 	display: inline-block;
-	margin: 2px;
-	float: left;
+	margin: 2px;	
 }
 
 #prestigeDataTable {
